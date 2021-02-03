@@ -1,0 +1,7 @@
+dependencies{
+    implementation project(":service")
+    implementation project(":model")
+}
+bootJar{
+    archiveFileName = 'webBootJar.jar'
+}
