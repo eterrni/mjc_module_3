@@ -1,6 +1,7 @@
 package com.epam.esm.repository;
 
 import com.epam.esm.entity.GiftCertificate;
+import com.epam.esm.util.GiftCertificateQueryParameter;
 
 import java.util.HashMap;
 import java.util.List;
@@ -20,17 +21,12 @@ public interface IGiftCertificateRepository extends ICRDRepository<GiftCertifica
     GiftCertificate update(final GiftCertificate entity);
 
     /**
-     * The method returns a collection of entities
+     * Get all entities from database
      *
-     * @param parameters HashMap of parameters, where the key is the name of the parameter, and the value is the value of the parameter
-     * @return List of found entities
+     * @param parameter {@link GiftCertificateQueryParameter} Data object containing params for request
+     * @return List of matched {@link GiftCertificate} entities from database.
      */
-    List<GiftCertificate> readByQueryParameters(HashMap<String, String> parameters);
 
-    /**
-     * The method correlates certificates and tags
-     *
-     * @param list of entities to map
-     */
-    void joinCertificatesAndTags(List<GiftCertificate> list);
+    List<GiftCertificate> readAll(GiftCertificateQueryParameter parameter);
+
 }

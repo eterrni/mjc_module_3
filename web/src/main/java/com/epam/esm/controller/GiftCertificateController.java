@@ -2,6 +2,7 @@ package com.epam.esm.controller;
 
 import com.epam.esm.dto.GiftCertificateDto;
 import com.epam.esm.service.certificate.GiftCertificateService;
+import com.epam.esm.util.GiftCertificateQueryParameter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -21,23 +22,14 @@ public class GiftCertificateController {
     private GiftCertificateService service;
 
     /**
-     * Get all gift certificate by search parameters.
+     * Invokes service method to get List of all GiftCertificates that matches parameters
      *
-     * @param tagName     the tag name
-     * @param name        the gift certificate name
-     * @param description the description
-     * @param sortType    the sort type
-     * @param orderType   the order type
-     * @return List of found gift certificates
+     * @param parameter is {@link GiftCertificateQueryParameter} object with requested parameters
+     * @return List of {@link GiftCertificateDto} objects with GiftCertificate data.
      */
     @GetMapping("/gift-certificates")
-    public List<GiftCertificateDto> readAll(
-            @RequestParam(value = "tagName", required = false) String tagName,
-            @RequestParam(value = "name", required = false) String name,
-            @RequestParam(value = "description", required = false) String description,
-            @RequestParam(value = "sortType", required = false) String sortType,
-            @RequestParam(value = "orderType", required = false) String orderType) {
-        return service.readByQueryParameters(tagName, name, description, sortType, orderType);
+    public List<GiftCertificateDto> readAll(GiftCertificateQueryParameter parameter) {
+        return service.readAll(parameter);
     }
 
     /**

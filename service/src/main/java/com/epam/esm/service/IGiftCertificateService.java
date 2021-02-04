@@ -1,7 +1,7 @@
 package com.epam.esm.service;
 
 import com.epam.esm.dto.GiftCertificateDto;
-import com.epam.esm.entity.GiftCertificate;
+import com.epam.esm.util.GiftCertificateQueryParameter;
 
 import java.util.List;
 
@@ -17,14 +17,10 @@ public interface IGiftCertificateService extends ICRDService<GiftCertificateDto,
     GiftCertificateDto update(final GiftCertificateDto entity);
 
     /**
-     * Get all entity by search parameters
+     * Invokes DAO method to get List of all GiftCertificates that matches parameters
      *
-     * @param tagName     the tag name
-     * @param name        the gift certificate name
-     * @param description the description
-     * @param sortType    the sort type
-     * @param orderType   the order type
-     * @return List of found gift certificates
+     * @param parameter is {@link GiftCertificateQueryParameter} object with requested parameters
+     * @return List of {@link GiftCertificateDto} objects with GiftCertificate data.
      */
-    List<GiftCertificateDto> readByQueryParameters(String tagName, String name, String description, String sortType, String orderType);
+    List<GiftCertificateDto> readAll(GiftCertificateQueryParameter parameter);
 }
