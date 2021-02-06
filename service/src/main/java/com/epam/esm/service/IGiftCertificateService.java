@@ -7,6 +7,8 @@ import java.util.List;
 
 /**
  * An interface that inherits the CRD interface and complements it with the methods required for the gift certificate
+ *
+ * @author Alexander Novikov
  */
 public interface IGiftCertificateService extends ICRDService<GiftCertificateDto, Integer> {
     /**

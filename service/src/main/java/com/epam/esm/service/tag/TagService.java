@@ -2,10 +2,12 @@ package com.epam.esm.service.tag;
 
 import com.epam.esm.dto.TagDto;
 import com.epam.esm.entity.Tag;
+import com.epam.esm.exception.DuplicateNameException;
+import com.epam.esm.exception.InvalidDataExeception;
 import com.epam.esm.exception.NotExistIdEntityException;
-import com.epam.esm.repository.exception.DuplicateNameException;
 import com.epam.esm.repository.tag.TagRepository;
 import com.epam.esm.service.ICRDService;
+import com.epam.esm.util.TagValidator;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -45,6 +47,9 @@ public class TagService implements ICRDService<TagDto, Integer> {
 
     @Override
     public TagDto create(TagDto tagDto) {
+        if (!TagValidator.validateForCreate(tagDto)) {
+            throw new InvalidDataExeception("Invalid data for creating a tag");
+        }
         if (tagRepository.readTagByName(tagDto.getName()).isPresent()) {
             throw new DuplicateNameException("A tag with name = " + tagDto.getName() + " already exists");
         } else {
