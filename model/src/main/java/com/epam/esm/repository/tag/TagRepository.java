@@ -6,6 +6,9 @@ import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Root;
 import java.util.List;
 import java.util.Optional;
 
@@ -16,13 +19,26 @@ public class TagRepository implements ITagRepository {
     private EntityManager entityManager;
 
     @Override
-    public List<Tag> readAll() {
-        return entityManager.createQuery("select tag from Tag tag", Tag.class).getResultList();
+    public List<Tag> readAll(int offset, int limit) {
+        CriteriaQuery<Tag> query = entityManager.getCriteriaBuilder().createQuery(Tag.class);
+        Root<Tag> root = query.from(Tag.class);
+        query.select(root);
+        return entityManager.createQuery(query)
+                .setFirstResult(offset)
+                .setMaxResults(limit)
+                .getResultList();
     }
 
     @Override
     public Tag read(final Integer tagId) {
         return entityManager.find(Tag.class, tagId);
+    }
+
+    @Override
+    public Optional<Tag> readTagByName(String tagName) {
+        return entityManager.createQuery("select tag From Tag tag where name=:tagName")
+                .setParameter("tagName", tagName)
+                .getResultStream().findFirst();
     }
 
     @Override
@@ -37,10 +53,11 @@ public class TagRepository implements ITagRepository {
     }
 
     @Override
-    public Optional<Tag> readTagByName(String tagName) {
-        return entityManager.createQuery("select tag From Tag tag where name=:tagName")
-                .setParameter("tagName", tagName)
-                .getResultStream().findFirst();
+    public long getCountOfEntities() {
+        CriteriaBuilder builder = entityManager.getCriteriaBuilder();
+        CriteriaQuery<Long> query = builder.createQuery(Long.class);
+        query.select(builder.count(query.from(Tag.class)));
+        return entityManager.createQuery(query).getSingleResult();
     }
 
 }

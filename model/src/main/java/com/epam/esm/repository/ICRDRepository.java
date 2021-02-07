@@ -1,7 +1,6 @@
 package com.epam.esm.repository;
 
 import java.util.List;
-import java.util.Optional;
 
 /**
  * Interface that describes CRD (create, read, delete) operations in repository layer
@@ -16,7 +15,7 @@ public interface ICRDRepository<T, K> {
      *
      * @return List of found entities
      */
-    List<T> readAll();
+    List<T> readAll(int offset, int limit);
 
     /**
      * Get entity

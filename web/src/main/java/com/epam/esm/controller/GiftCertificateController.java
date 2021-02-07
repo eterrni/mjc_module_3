@@ -5,6 +5,7 @@ import com.epam.esm.service.certificate.GiftCertificateService;
 import com.epam.esm.util.GiftCertificateQueryParameter;
 import com.epam.esm.util.HATEOASBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.hateoas.PagedModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -34,8 +35,14 @@ public class GiftCertificateController {
      * @return List of {@link GiftCertificateDto} objects with GiftCertificate data.
      */
     @GetMapping("/gift-certificates")
-    public List<GiftCertificateDto> readAll(GiftCertificateQueryParameter parameter) {
-        return HATEOASBuilder.addLinksToCertificateDto(service.readAll(parameter));
+    public ResponseEntity<PagedModel<GiftCertificateDto>> readAll(
+            @RequestParam(value = "page", required = false, defaultValue = "1") int page,
+            @RequestParam(value = "size", required = false, defaultValue = "4") int size,
+            GiftCertificateQueryParameter parameter) {
+        List<GiftCertificateDto> certificateDtoList = service.readAll(parameter, page, size);
+        HATEOASBuilder.addLinksToCertificateDto(certificateDtoList);
+        PagedModel<GiftCertificateDto> pagedModel = HATEOASBuilder.addPaginationToCertificates(certificateDtoList, parameter, page, size, service.getCountOfEntities());
+        return ResponseEntity.ok(pagedModel);
     }
 
     /**

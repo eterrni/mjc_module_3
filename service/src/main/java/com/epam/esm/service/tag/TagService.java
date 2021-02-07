@@ -6,7 +6,8 @@ import com.epam.esm.exception.DuplicateNameException;
 import com.epam.esm.exception.InvalidDataExeception;
 import com.epam.esm.exception.NotExistIdEntityException;
 import com.epam.esm.repository.tag.TagRepository;
-import com.epam.esm.service.ICRDService;
+import com.epam.esm.service.ITagService;
+import com.epam.esm.util.Page;
 import com.epam.esm.util.TagValidator;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,7 +19,7 @@ import java.util.stream.Collectors;
 
 @Service
 @Transactional
-public class TagService implements ICRDService<TagDto, Integer> {
+public class TagService implements ITagService {
 
     private TagRepository tagRepository;
 
@@ -31,8 +32,9 @@ public class TagService implements ICRDService<TagDto, Integer> {
     }
 
     @Override
-    public List<TagDto> readAll() {
-        return tagRepository.readAll().stream()
+    public List<TagDto> readAll(int page, int size) {
+        Page tagPage = new Page(page, size, tagRepository.getCountOfEntities());
+        return tagRepository.readAll(tagPage.getOffset(), tagPage.getLimit()).stream()
                 .map(tag -> modelMapper.map(tag, TagDto.class))
                 .collect(Collectors.toList());
     }
@@ -65,6 +67,11 @@ public class TagService implements ICRDService<TagDto, Integer> {
         if (read == null) {
             throw new NotExistIdEntityException("There is no tag with ID = " + tagId + " in Database");
         } else tagRepository.delete(tagId);
+    }
+
+    @Override
+    public long getCountOfEntities() {
+        return tagRepository.getCountOfEntities();
     }
 
 }

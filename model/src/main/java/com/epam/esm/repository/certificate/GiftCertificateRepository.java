@@ -10,6 +10,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Root;
 import java.util.List;
 
 @Repository
@@ -19,16 +20,25 @@ public class GiftCertificateRepository implements IGiftCertificateRepository {
     private EntityManager entityManager;
 
     @Override
-    public List<GiftCertificate> readAll() {
-        return entityManager.createQuery("select certificate from GiftCertificate certificate", GiftCertificate.class).getResultList();
+    public List<GiftCertificate> readAll(int offset, int limit) {
+        CriteriaQuery<GiftCertificate> query = entityManager.getCriteriaBuilder().createQuery(GiftCertificate.class);
+        Root<GiftCertificate> root = query.from(GiftCertificate.class);
+        query.select(root);
+        return entityManager.createQuery(query)
+                .setFirstResult(offset)
+                .setMaxResults(limit)
+                .getResultList();
     }
 
     @Override
-    public List<GiftCertificate> readAll(GiftCertificateQueryParameter parameter) {
+    public List<GiftCertificate> readAll(GiftCertificateQueryParameter parameter, int offset, int limit) {
         CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
         CriteriaQuery<GiftCertificate> criteriaQuery = GiftCertificateCriteriaBuilder.getInstance().build(criteriaBuilder, parameter);
 
-        return entityManager.createQuery(criteriaQuery).getResultList();
+        return entityManager.createQuery(criteriaQuery)
+                .setFirstResult(offset)
+                .setMaxResults(limit)
+                .getResultList();
     }
 
     @Override
@@ -50,6 +60,14 @@ public class GiftCertificateRepository implements IGiftCertificateRepository {
     @Override
     public void delete(final Integer id) {
         entityManager.remove(read(id));
+    }
+
+    @Override
+    public long getCountOfEntities() {
+        CriteriaBuilder builder = entityManager.getCriteriaBuilder();
+        CriteriaQuery<Long> query = builder.createQuery(Long.class);
+        query.select(builder.count(query.from(GiftCertificate.class)));
+        return entityManager.createQuery(query).getSingleResult();
     }
 
 

@@ -4,6 +4,7 @@ import com.epam.esm.dto.TagDto;
 import com.epam.esm.service.tag.TagService;
 import com.epam.esm.util.HATEOASBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.hateoas.PagedModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -32,8 +33,13 @@ public class TagController {
      * @return List of found tags
      */
     @GetMapping("/tags")
-    public List<TagDto> readAll() {
-        return HATEOASBuilder.addLinksToTagDto(service.readAll());
+    public ResponseEntity<PagedModel<TagDto>> readAll(
+            @RequestParam(value = "page", required = false, defaultValue = "1") int page,
+            @RequestParam(value = "size", required = false, defaultValue = "4") int size) {
+        List<TagDto> tags = service.readAll(page, size);
+        HATEOASBuilder.addLinksToTagDto(tags);
+        PagedModel<TagDto> pagedModel = HATEOASBuilder.addPaginationToTags(tags, page, size, service.getCountOfEntities());
+        return ResponseEntity.ok(pagedModel);
     }
 
     /**

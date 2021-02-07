@@ -3,7 +3,6 @@ package com.epam.esm.repository;
 import com.epam.esm.entity.GiftCertificate;
 import com.epam.esm.util.GiftCertificateQueryParameter;
 
-import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -27,6 +26,13 @@ public interface IGiftCertificateRepository extends ICRDRepository<GiftCertifica
      * @return List of matched {@link GiftCertificate} entities from database.
      */
 
-    List<GiftCertificate> readAll(GiftCertificateQueryParameter parameter);
+    List<GiftCertificate> readAll(GiftCertificateQueryParameter parameter, int page, int size);
+
+    /**
+     * Get count of exist gift certificates.
+     *
+     * @return number of exist gift certificates
+     */
+    long getCountOfEntities();
 
 }

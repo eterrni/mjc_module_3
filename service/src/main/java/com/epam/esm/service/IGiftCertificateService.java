@@ -24,5 +24,12 @@ public interface IGiftCertificateService extends ICRDService<GiftCertificateDto,
      * @param parameter is {@link GiftCertificateQueryParameter} object with requested parameters
      * @return List of {@link GiftCertificateDto} objects with GiftCertificate data.
      */
-    List<GiftCertificateDto> readAll(GiftCertificateQueryParameter parameter);
+    List<GiftCertificateDto> readAll(GiftCertificateQueryParameter parameter, int page, int size);
+
+    /**
+     * Get count of exist gift certificates.
+     *
+     * @return number of exist gift certificates
+     */
+    long getCountOfEntities();
 }

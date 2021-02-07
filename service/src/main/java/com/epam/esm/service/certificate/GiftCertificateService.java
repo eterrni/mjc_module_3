@@ -10,6 +10,7 @@ import com.epam.esm.repository.tag.TagRepository;
 import com.epam.esm.service.IGiftCertificateService;
 import com.epam.esm.util.GiftCertificateQueryParameter;
 import com.epam.esm.util.GiftCertificateValidator;
+import com.epam.esm.util.Page;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -37,18 +38,20 @@ public class GiftCertificateService implements IGiftCertificateService {
     }
 
     @Override
-    public List<GiftCertificateDto> readAll() {
-        return giftCertificateRepository.readAll().stream()
+    public List<GiftCertificateDto> readAll(int page, int size) {
+        Page certificatePage = new Page(page, size, giftCertificateRepository.getCountOfEntities());
+        return giftCertificateRepository.readAll(certificatePage.getOffset(), certificatePage.getLimit()).stream()
                 .map(giftCertificate -> modelMapper.map(giftCertificate, GiftCertificateDto.class))
                 .collect(Collectors.toList());
     }
 
     @Override
-    public List<GiftCertificateDto> readAll(GiftCertificateQueryParameter parameter) {
+    public List<GiftCertificateDto> readAll(GiftCertificateQueryParameter parameter, int page, int size) {
         if (parameter.isEmpty()) {
-            return readAll();
+            return readAll(page, size);
         }
-        List<GiftCertificate> giftCertificates = giftCertificateRepository.readAll(parameter);
+        Page certificatePage = new Page(page, size, giftCertificateRepository.getCountOfEntities());
+        List<GiftCertificate> giftCertificates = giftCertificateRepository.readAll(parameter, certificatePage.getOffset(), certificatePage.getLimit());
         return giftCertificates.stream().map(giftCertificate -> modelMapper.map(giftCertificate, GiftCertificateDto.class)).collect(Collectors.toList());
     }
 
@@ -97,6 +100,11 @@ public class GiftCertificateService implements IGiftCertificateService {
         if (read == null) {
             throw new NotExistIdEntityException("There is no gift certificate with ID = " + id + " in Database");
         } else giftCertificateRepository.delete(id);
+    }
+
+    @Override
+    public long getCountOfEntities() {
+        return giftCertificateRepository.getCountOfEntities();
     }
 
     private void createAndSetTags(GiftCertificate giftCertificate) {

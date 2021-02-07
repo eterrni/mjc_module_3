@@ -2,7 +2,6 @@ package com.epam.esm.repository;
 
 import com.epam.esm.entity.Tag;
 
-import java.util.List;
 import java.util.Optional;
 
 /**
@@ -16,4 +15,11 @@ public interface ITagRepository extends ICRDRepository<Tag, Integer> {
      * @return the entity with this tag name
      */
     Optional<Tag> readTagByName(String tagName);
+
+    /**
+     * Get count of exist tags.
+     *
+     * @return number of exist tags
+     */
+    long getCountOfEntities();
 }

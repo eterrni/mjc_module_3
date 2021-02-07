@@ -15,7 +15,7 @@ public interface ICRDService<T, K> {
      *
      * @return List of found entities
      */
-    List<T> readAll();
+    List<T> readAll(int page, int size);
 
     /**
      * Get entity by id
