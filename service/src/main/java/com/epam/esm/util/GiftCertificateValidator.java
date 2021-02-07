@@ -3,6 +3,7 @@ package com.epam.esm.util;
 import com.epam.esm.dto.GiftCertificateDto;
 
 import java.math.BigDecimal;
+import java.util.Objects;
 
 public final class GiftCertificateValidator {
     private GiftCertificateValidator() {
@@ -22,16 +23,25 @@ public final class GiftCertificateValidator {
     }
 
     public static boolean validateForUpdate(GiftCertificateDto giftCertificateDto) {
-        if (giftCertificateDto.getName() != null) {
-            return validateName(giftCertificateDto.getName());
+        if (Objects.nonNull(giftCertificateDto.getName())) {
+            if (!validateName(giftCertificateDto.getName())) {
+                return false;
+            }
         }
-        if (giftCertificateDto.getPrice() != null) {
-            return validatePrice(giftCertificateDto.getPrice());
+        if (Objects.nonNull(giftCertificateDto.getPrice())) {
+            if (!validatePrice(giftCertificateDto.getPrice())) {
+                return false;
+            }
         }
-        if (giftCertificateDto.getDuration() != null) {
-            return validateDuration(giftCertificateDto.getDuration());
+        if (Objects.nonNull(giftCertificateDto.getDuration())) {
+            if (!validateDuration(giftCertificateDto.getDuration())) {
+                return false;
+            }
         }
-        return validateDescription(giftCertificateDto.getDescription());
+        if (Objects.nonNull(giftCertificateDto.getDescription())) {
+            return validateDescription(giftCertificateDto.getDescription());
+        }
+        return true;
     }
 
     private static boolean validateName(String name) {

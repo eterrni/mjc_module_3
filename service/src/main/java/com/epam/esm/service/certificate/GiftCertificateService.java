@@ -74,13 +74,16 @@ public class GiftCertificateService implements IGiftCertificateService {
 
     @Override
     public GiftCertificateDto update(GiftCertificateDto modifiedGiftCertificateDto) {
+
         if (!GiftCertificateValidator.validateForUpdate(modifiedGiftCertificateDto)) {
             throw new InvalidDataExeception("Invalid data for update a certificate");
         }
+
         GiftCertificate readGiftCertificate = giftCertificateRepository.read(modifiedGiftCertificateDto.getId());
         if (readGiftCertificate == null) {
             throw new NotExistIdEntityException("There is no gift certificate with ID = " + modifiedGiftCertificateDto.getId() + " in Database");
         }
+
         GiftCertificate modifiedGiftCertificate = modelMapper.map(modifiedGiftCertificateDto, GiftCertificate.class);
         updateGiftCertificateFields(readGiftCertificate, modifiedGiftCertificate);
         GiftCertificate update = giftCertificateRepository.update(readGiftCertificate);
@@ -115,17 +118,17 @@ public class GiftCertificateService implements IGiftCertificateService {
     }
 
     private void updateGiftCertificateFields(GiftCertificate readGiftCertificate, GiftCertificate modifiedGiftCertificate) {
-        if (Objects.nonNull((modifiedGiftCertificate.getDuration()))) {
-            readGiftCertificate.setDuration(modifiedGiftCertificate.getDuration());
+        if (Objects.nonNull(modifiedGiftCertificate.getName())) {
+            readGiftCertificate.setName(modifiedGiftCertificate.getName());
         }
         if (Objects.nonNull(modifiedGiftCertificate.getDescription())) {
             readGiftCertificate.setDescription(modifiedGiftCertificate.getDescription());
         }
-        if (Objects.nonNull(modifiedGiftCertificate.getName())) {
-            readGiftCertificate.setName(modifiedGiftCertificate.getName());
-        }
         if (Objects.nonNull(modifiedGiftCertificate.getPrice())) {
             readGiftCertificate.setPrice(modifiedGiftCertificate.getPrice());
+        }
+        if (Objects.nonNull((modifiedGiftCertificate.getDuration()))) {
+            readGiftCertificate.setDuration(modifiedGiftCertificate.getDuration());
         }
         if (Objects.nonNull(modifiedGiftCertificate.getTags())) {
             createAndSetTags(modifiedGiftCertificate);
