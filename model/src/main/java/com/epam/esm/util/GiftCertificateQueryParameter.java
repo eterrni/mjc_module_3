@@ -13,6 +13,10 @@ public class GiftCertificateQueryParameter {
     private SortType sortType;
     private OrderType orderType;
 
+    public GiftCertificateQueryParameter(String tagName) {
+        setTagName(tagName);
+    }
+
     public GiftCertificateQueryParameter(String name, String description, String tagName, String sortType, String orderType) {
         if (!StringUtils.isEmpty(name)) {
             setName(name);

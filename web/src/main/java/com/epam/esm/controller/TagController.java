@@ -2,8 +2,10 @@ package com.epam.esm.controller;
 
 import com.epam.esm.dto.TagDto;
 import com.epam.esm.service.tag.TagService;
+import com.epam.esm.util.HATEOASBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -17,8 +19,12 @@ import java.util.List;
 @RequestMapping("/api")
 public class TagController {
 
+    private final TagService service;
+
     @Autowired
-    private TagService service;
+    public TagController(TagService service) {
+        this.service = service;
+    }
 
     /**
      * Get all tags
@@ -27,7 +33,7 @@ public class TagController {
      */
     @GetMapping("/tags")
     public List<TagDto> readAll() {
-        return service.readAll();
+        return HATEOASBuilder.addLinksToTagDto(service.readAll());
     }
 
     /**
@@ -38,7 +44,7 @@ public class TagController {
      */
     @GetMapping("/tag/{id}")
     public TagDto read(@PathVariable int id) {
-        return service.read(id);
+        return HATEOASBuilder.addLinksToTagDto(service.read(id));
     }
 
     /**
@@ -59,9 +65,9 @@ public class TagController {
      * @param id of the tag we want to delete
      */
     @DeleteMapping("/tag/{id}")
-    @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void delete(@PathVariable int id) {
+    public ResponseEntity<Void> delete(@PathVariable int id) {
         service.delete(id);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
 }

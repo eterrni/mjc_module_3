@@ -3,8 +3,10 @@ package com.epam.esm.controller;
 import com.epam.esm.dto.GiftCertificateDto;
 import com.epam.esm.service.certificate.GiftCertificateService;
 import com.epam.esm.util.GiftCertificateQueryParameter;
+import com.epam.esm.util.HATEOASBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -18,8 +20,12 @@ import java.util.List;
 @RequestMapping("/api")
 public class GiftCertificateController {
 
+    private final GiftCertificateService service;
+
     @Autowired
-    private GiftCertificateService service;
+    public GiftCertificateController(GiftCertificateService service) {
+        this.service = service;
+    }
 
     /**
      * Invokes service method to get List of all GiftCertificates that matches parameters
@@ -29,7 +35,7 @@ public class GiftCertificateController {
      */
     @GetMapping("/gift-certificates")
     public List<GiftCertificateDto> readAll(GiftCertificateQueryParameter parameter) {
-        return service.readAll(parameter);
+        return HATEOASBuilder.addLinksToCertificateDto(service.readAll(parameter));
     }
 
     /**
@@ -40,7 +46,7 @@ public class GiftCertificateController {
      */
     @GetMapping("/gift-certificate/{id}")
     public GiftCertificateDto read(@PathVariable int id) {
-        return service.read(id);
+        return HATEOASBuilder.addLinksToCertificateDto(service.read(id));
     }
 
     /**
@@ -61,10 +67,10 @@ public class GiftCertificateController {
      * @param giftCertificateDto modified
      */
     @PutMapping("/gift-certificate/{id}")
-    @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void update(@PathVariable int id, @RequestBody GiftCertificateDto giftCertificateDto) {
+    public ResponseEntity<Void> update(@PathVariable int id, @RequestBody GiftCertificateDto giftCertificateDto) {
         giftCertificateDto.setId(id);
         service.update(giftCertificateDto);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
     /**
@@ -73,9 +79,9 @@ public class GiftCertificateController {
      * @param id of the gift certificate we want to delete
      */
     @DeleteMapping("/gift-certificate/{id}")
-    @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void delete(@PathVariable int id) {
+    public ResponseEntity<Void> delete(@PathVariable int id) {
         service.delete(id);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
 }
