@@ -3,7 +3,9 @@ package com.epam.esm.controller;
 import com.epam.esm.dto.OrderDto;
 import com.epam.esm.service.order.OrderService;
 import com.epam.esm.util.CreateParameterOrder;
+import com.epam.esm.util.HATEOASBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.hateoas.PagedModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
@@ -16,7 +18,7 @@ import java.util.List;
  */
 @RestController
 @RequestMapping("/api")
-public class OrderController {
+public class OrderController extends HATEOASController<OrderDto> {
 
     private final OrderService orderService;
 
@@ -31,8 +33,12 @@ public class OrderController {
      * @return List of {@link OrderDto} objects with Order data.
      */
     @GetMapping("/orders")
-    public List<OrderDto> readAll() {
-        return orderService.readAll();
+    public PagedModel<OrderDto> readAll(
+            @RequestParam(value = "page", required = false, defaultValue = "1") int page,
+            @RequestParam(value = "size", required = false, defaultValue = "4") int size) {
+        List<OrderDto> orderDtoList = orderService.readAll(page, size);
+        HATEOASBuilder.addLinksToListOrder(orderDtoList);
+        return addPagination(OrderController.class, orderDtoList, page, size, orderService.getCountOfEntities());
     }
 
     /**
@@ -43,7 +49,9 @@ public class OrderController {
      */
     @GetMapping(value = "/orders", params = "user")
     public List<OrderDto> readByUserId(@RequestParam(value = "user") int userID) {
-        return orderService.readOrdersByUserID(userID);
+        List<OrderDto> orderDtoList = orderService.readOrdersByUserID(userID);
+        HATEOASBuilder.addLinksToListOrder(orderDtoList);
+        return orderDtoList;
     }
 
     /**
@@ -54,7 +62,7 @@ public class OrderController {
      */
     @GetMapping("/order/{orderID}")
     public OrderDto read(@PathVariable int orderID) {
-        return orderService.read(orderID);
+        return HATEOASBuilder.addLinksToOrder(orderService.read(orderID));
     }
 
     /**

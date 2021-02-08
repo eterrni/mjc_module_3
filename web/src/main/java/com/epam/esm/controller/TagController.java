@@ -18,7 +18,7 @@ import java.util.List;
  */
 @RestController
 @RequestMapping("/api")
-public class TagController {
+public class TagController extends HATEOASController<TagDto> {
 
     private final TagService service;
 
@@ -33,13 +33,12 @@ public class TagController {
      * @return List of found tags
      */
     @GetMapping("/tags")
-    public ResponseEntity<PagedModel<TagDto>> readAll(
+    public PagedModel<TagDto> readAll(
             @RequestParam(value = "page", required = false, defaultValue = "1") int page,
             @RequestParam(value = "size", required = false, defaultValue = "4") int size) {
         List<TagDto> tags = service.readAll(page, size);
-        HATEOASBuilder.addLinksToTagDto(tags);
-        PagedModel<TagDto> pagedModel = HATEOASBuilder.addPaginationToTags(tags, page, size, service.getCountOfEntities());
-        return ResponseEntity.ok(pagedModel);
+        HATEOASBuilder.addLinksToListTagDto(tags);
+        return addPagination(TagController.class, tags, page, size, service.getCountOfEntities());
     }
 
     /**

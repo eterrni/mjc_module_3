@@ -10,6 +10,7 @@ import com.epam.esm.repository.order.OrderRepository;
 import com.epam.esm.repository.user.UserRepository;
 import com.epam.esm.service.IOrderService;
 import com.epam.esm.util.CreateParameterOrder;
+import com.epam.esm.util.Page;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -37,8 +38,9 @@ public class OrderService implements IOrderService {
     }
 
     @Override
-    public List<OrderDto> readAll() {
-        return orderRepository.readAll().stream()
+    public List<OrderDto> readAll(int page, int size) {
+        Page orderPage = new Page(page, size, orderRepository.getCountOfEntities());
+        return orderRepository.readAll(orderPage.getOffset(), orderPage.getLimit()).stream()
                 .map(order -> modelMapper.map(order, OrderDto.class))
                 .collect(Collectors.toList());
     }
@@ -86,5 +88,9 @@ public class OrderService implements IOrderService {
         order.setUser(user);
 
         return modelMapper.map(orderRepository.create(order), OrderDto.class);
+    }
+
+    public long getCountOfEntities() {
+        return orderRepository.getCountOfEntities();
     }
 }

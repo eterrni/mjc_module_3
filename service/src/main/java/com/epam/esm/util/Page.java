@@ -29,7 +29,7 @@ public class Page {
         if (size < 1) {
             throw new InvalidDataExeception("The number of output entities must be greater than 0.");
         }
-        if ((page - 1) * size >= countEntity) {
+        if ((page - 1) * size > countEntity) {
             throw new InvalidDataExeception("The page with the number = " + page + " does not exist.");
         }
         return true;

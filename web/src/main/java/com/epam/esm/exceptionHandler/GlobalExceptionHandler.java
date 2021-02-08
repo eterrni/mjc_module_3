@@ -22,7 +22,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler
     public ResponseEntity<ErrorHandler> handleInvalidDataException(InvalidDataExeception exception) {
-        return new ResponseEntity<>(new ErrorHandler(exception.getMessage(), 50), HttpStatus.NOT_ACCEPTABLE);
+        return new ResponseEntity<>(new ErrorHandler(exception.getMessage(), 50), HttpStatus.BAD_REQUEST);
     }
 
 }

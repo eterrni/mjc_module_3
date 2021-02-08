@@ -35,14 +35,13 @@ public class GiftCertificateController {
      * @return List of {@link GiftCertificateDto} objects with GiftCertificate data.
      */
     @GetMapping("/gift-certificates")
-    public ResponseEntity<PagedModel<GiftCertificateDto>> readAll(
+    public PagedModel<GiftCertificateDto> readAll(
             @RequestParam(value = "page", required = false, defaultValue = "1") int page,
             @RequestParam(value = "size", required = false, defaultValue = "4") int size,
             GiftCertificateQueryParameter parameter) {
         List<GiftCertificateDto> certificateDtoList = service.readAll(parameter, page, size);
-        HATEOASBuilder.addLinksToCertificateDto(certificateDtoList);
-        PagedModel<GiftCertificateDto> pagedModel = HATEOASBuilder.addPaginationToCertificates(certificateDtoList, parameter, page, size, service.getCountOfEntities());
-        return ResponseEntity.ok(pagedModel);
+        HATEOASBuilder.addLinksToListCertificateDto(certificateDtoList);
+        return HATEOASBuilder.addPaginationToCertificates(certificateDtoList, parameter, page, size, service.getCountOfEntities(parameter));
     }
 
     /**
@@ -73,7 +72,7 @@ public class GiftCertificateController {
      *
      * @param giftCertificateDto modified
      */
-    @PutMapping("/gift-certificate/{id}")
+    @PatchMapping("/gift-certificate/{id}")
     public ResponseEntity<Void> update(@PathVariable int id, @RequestBody GiftCertificateDto giftCertificateDto) {
         giftCertificateDto.setId(id);
         service.update(giftCertificateDto);

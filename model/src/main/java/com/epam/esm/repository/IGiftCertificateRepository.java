@@ -35,4 +35,11 @@ public interface IGiftCertificateRepository extends ICRDRepository<GiftCertifica
      */
     long getCountOfEntities();
 
+    /**
+     * Get count of exist gift certificates which correspond to the parameters.
+     *
+     * @return number of exist gift certificates which correspond to the parameters.
+     */
+    long getCountOfEntities(GiftCertificateQueryParameter parameter);
+
 }

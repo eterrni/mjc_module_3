@@ -23,5 +23,5 @@ public interface IUserService {
      *
      * @return List of {@link UserDto} objects with User data.
      */
-    List<UserDto> readAll();
+    List<UserDto> readAll(int page, int size);
 }

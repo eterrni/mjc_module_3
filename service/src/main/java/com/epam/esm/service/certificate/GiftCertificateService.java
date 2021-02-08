@@ -50,7 +50,7 @@ public class GiftCertificateService implements IGiftCertificateService {
         if (parameter.isEmpty()) {
             return readAll(page, size);
         }
-        Page certificatePage = new Page(page, size, giftCertificateRepository.getCountOfEntities());
+        Page certificatePage = new Page(page, size, giftCertificateRepository.getCountOfEntities(parameter));
         List<GiftCertificate> giftCertificates = giftCertificateRepository.readAll(parameter, certificatePage.getOffset(), certificatePage.getLimit());
         return giftCertificates.stream().map(giftCertificate -> modelMapper.map(giftCertificate, GiftCertificateDto.class)).collect(Collectors.toList());
     }
@@ -103,8 +103,8 @@ public class GiftCertificateService implements IGiftCertificateService {
     }
 
     @Override
-    public long getCountOfEntities() {
-        return giftCertificateRepository.getCountOfEntities();
+    public long getCountOfEntities(GiftCertificateQueryParameter parameter) {
+        return giftCertificateRepository.getCountOfEntities(parameter);
     }
 
     private void createAndSetTags(GiftCertificate giftCertificate) {

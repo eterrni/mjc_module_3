@@ -10,7 +10,7 @@ public interface IOrderRepository {
      *
      * @return List of found entities.
      */
-    List<Order> readAll();
+    List<Order> readAll(int offset, int limit);
 
     /**
      * Connects to database and returns Order by ID.
@@ -35,4 +35,11 @@ public interface IOrderRepository {
      * @return Created entity from database
      */
     Order create(Order order);
+
+    /**
+     * Get count of exist orders.
+     *
+     * @return number of exist orders.
+     */
+    long getCountOfEntities();
 }

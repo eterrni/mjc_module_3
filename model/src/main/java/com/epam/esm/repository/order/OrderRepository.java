@@ -17,8 +17,14 @@ public class OrderRepository implements IOrderRepository {
     private EntityManager entityManager;
 
     @Override
-    public List<Order> readAll() {
-        return entityManager.createQuery("select order from Order order", Order.class).getResultList();
+    public List<Order> readAll(int offset, int limit) {
+        CriteriaQuery<Order> query = entityManager.getCriteriaBuilder().createQuery(Order.class);
+        Root<Order> root = query.from(Order.class);
+        query.select(root);
+        return entityManager.createQuery(query)
+                .setFirstResult(offset)
+                .setMaxResults(limit)
+                .getResultList();
     }
 
     @Override
@@ -40,5 +46,13 @@ public class OrderRepository implements IOrderRepository {
     public Order create(Order order) {
         entityManager.persist(order);
         return order;
+    }
+
+    @Override
+    public long getCountOfEntities() {
+        CriteriaBuilder builder = entityManager.getCriteriaBuilder();
+        CriteriaQuery<Long> query = builder.createQuery(Long.class);
+        query.select(builder.count(query.from(Order.class)));
+        return entityManager.createQuery(query).getSingleResult();
     }
 }

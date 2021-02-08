@@ -1,20 +1,17 @@
 package com.epam.esm.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.hateoas.RepresentationModel;
 
 import java.util.List;
 
 @Data
 @NoArgsConstructor
-public class UserDto {
+public class UserDto extends RepresentationModel<UserDto> {
     private int id;
     private String name;
-//    @JsonIgnoreProperties(value = {"user", "giftCertificateList"})
-//    @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonIgnore
     private List<OrderDto> orderList;
 }

@@ -63,6 +63,14 @@ public class GiftCertificateRepository implements IGiftCertificateRepository {
     }
 
     @Override
+    public long getCountOfEntities(GiftCertificateQueryParameter parameter) {
+        CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+        CriteriaQuery<GiftCertificate> criteriaQuery = GiftCertificateCriteriaBuilder.getInstance().build(criteriaBuilder, parameter);
+        return entityManager.createQuery(criteriaQuery).getResultList().size();
+
+    }
+
+    @Override
     public long getCountOfEntities() {
         CriteriaBuilder builder = entityManager.getCriteriaBuilder();
         CriteriaQuery<Long> query = builder.createQuery(Long.class);

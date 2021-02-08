@@ -31,5 +31,5 @@ public interface IGiftCertificateService extends ICRDService<GiftCertificateDto,
      *
      * @return number of exist gift certificates
      */
-    long getCountOfEntities();
+    long getCountOfEntities(GiftCertificateQueryParameter parameter);
 }

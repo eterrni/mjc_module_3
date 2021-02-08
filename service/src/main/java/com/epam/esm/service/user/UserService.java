@@ -5,6 +5,7 @@ import com.epam.esm.entity.User;
 import com.epam.esm.exception.NotExistIdEntityException;
 import com.epam.esm.repository.user.UserRepository;
 import com.epam.esm.service.IUserService;
+import com.epam.esm.util.Page;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -34,10 +35,14 @@ public class UserService implements IUserService {
     }
 
     @Override
-    public List<UserDto> readAll() {
-        List<User> users = userRepository.readAll();
-        return users.stream()
+    public List<UserDto> readAll(int page, int size) {
+        Page userPage = new Page(page, size, userRepository.getCountOfEntities());
+        return userRepository.readAll(userPage.getOffset(), userPage.getLimit()).stream()
                 .map(user -> modelMapper.map(user, UserDto.class))
                 .collect(Collectors.toList());
+    }
+
+    public long getCountOfEntities(){
+        return userRepository.getCountOfEntities();
     }
 }

@@ -16,7 +16,7 @@ public interface IOrderService {
      *
      * @return Objects with order data.
      */
-    List<OrderDto> readAll();
+    List<OrderDto> readAll(int page, int size);
 
     /**
      * Invokes DAO method to get List of all Orders from database.

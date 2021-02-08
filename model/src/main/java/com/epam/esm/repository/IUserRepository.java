@@ -14,7 +14,7 @@ public interface IUserRepository {
      *
      * @return List of all {@link User} entities from database.
      */
-    List<User> readAll();
+    List<User> readAll(int page, int size);
 
     /**
      * Connects to database and returns User by ID.
@@ -23,4 +23,11 @@ public interface IUserRepository {
      * @return {@link User} the entity on this ID.
      */
     User read(int id);
+
+    /**
+     * Get count of exist users.
+     *
+     * @return number of exist users.
+     */
+    long getCountOfEntities();
 }
