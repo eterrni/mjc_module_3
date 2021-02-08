@@ -40,7 +40,7 @@ public class GiftCertificateController {
             @RequestParam(value = "size", required = false, defaultValue = "4") int size,
             GiftCertificateQueryParameter parameter) {
         List<GiftCertificateDto> certificateDtoList = service.readAll(parameter, page, size);
-        HATEOASBuilder.addLinksToListCertificateDto(certificateDtoList);
+        HATEOASBuilder.addLinksToListCertificate(certificateDtoList);
         return HATEOASBuilder.addPaginationToCertificates(certificateDtoList, parameter, page, size, service.getCountOfEntities(parameter));
     }
 
@@ -52,7 +52,7 @@ public class GiftCertificateController {
      */
     @GetMapping("/gift-certificate/{id}")
     public GiftCertificateDto read(@PathVariable int id) {
-        return HATEOASBuilder.addLinksToCertificateDto(service.read(id));
+        return HATEOASBuilder.addLinksToCertificate(service.read(id));
     }
 
     /**

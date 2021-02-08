@@ -20,37 +20,39 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 public final class HATEOASBuilder {
 
-    public static GiftCertificateDto addLinksToCertificateDto(GiftCertificateDto giftCertificateDto) {
+    public static GiftCertificateDto addLinksToCertificate(GiftCertificateDto giftCertificateDto) {
         giftCertificateDto.add(linkTo(methodOn(GiftCertificateController.class).update(giftCertificateDto.getId(), giftCertificateDto)).withRel("update"));
         giftCertificateDto.add(linkTo(methodOn(GiftCertificateController.class).delete(giftCertificateDto.getId())).withRel("delete"));
-        addLinksToListTagDto(giftCertificateDto.getTags());
+        addLinksToListTag(giftCertificateDto.getTags());
         return giftCertificateDto;
     }
 
-    public static TagDto addLinksToTagDto(TagDto tagDto) {
-        tagDto.add(linkTo(methodOn(TagController.class).delete(tagDto.getId())).withRel("delete"));
+    public static TagDto addLinksToTag(TagDto tagDto) {
+        tagDto.add(linkTo(methodOn(TagController.class).delete(tagDto.getId())).withRel("delete tag"));
+        tagDto.add(linkTo(methodOn(TagController.class).create(tagDto)).withRel("create tag"));
         return tagDto;
     }
 
     public static UserDto addLinksToUser(UserDto user) {
-        user.add(linkTo(methodOn(UserController.class).read(user.getId())).withSelfRel());
+        user.add(linkTo(methodOn(OrderController.class).readByUserId(user.getId())).withRel("all user orders"));
         return user;
     }
 
     public static OrderDto addLinksToOrder(OrderDto orderDto) {
-        addLinksToListCertificateDto(orderDto.getGiftCertificateList());
-        addLinksToUser(orderDto.getUser());
+        addLinksToListCertificate(orderDto.getGiftCertificateList());
+        UserDto user = orderDto.getUser();
+        user.add(linkTo(methodOn(UserController.class).read(user.getId())).withRel("user"));
         return orderDto;
     }
 
-    public static void addLinksToListCertificateDto(List<GiftCertificateDto> certificateDtoList) {
+    public static void addLinksToListCertificate(List<GiftCertificateDto> certificateDtoList) {
         for (GiftCertificateDto giftCertificateDto : certificateDtoList) {
             giftCertificateDto.add(linkTo(methodOn(GiftCertificateController.class).read(giftCertificateDto.getId())).withSelfRel());
-            addLinksToListTagDto(giftCertificateDto.getTags());
+            addLinksToListTag(giftCertificateDto.getTags());
         }
     }
 
-    public static void addLinksToListTagDto(List<TagDto> tagDtoList) {
+    public static void addLinksToListTag(List<TagDto> tagDtoList) {
         for (TagDto tagDto : tagDtoList) {
             tagDto.add(linkTo(methodOn(TagController.class).read(tagDto.getId())).withSelfRel());
         }
@@ -58,15 +60,17 @@ public final class HATEOASBuilder {
 
     public static void addLinksToListUser(List<UserDto> userDtoList) {
         for (UserDto userDto : userDtoList) {
-            userDto.add(linkTo(methodOn(OrderController.class).readByUserId(userDto.getId())).withRel("all user orders"));
+            userDto.add(linkTo(methodOn(UserController.class).read(userDto.getId())).withSelfRel());
         }
     }
 
     public static void addLinksToListOrder(List<OrderDto> orderDtoList) {
         for (OrderDto orderDto : orderDtoList) {
             orderDto.add(linkTo(methodOn(OrderController.class).readByUserId(orderDto.getUser().getId())).withRel("user orders"));
-            addLinksToListCertificateDto(orderDto.getGiftCertificateList());
-            addLinksToUser(orderDto.getUser());
+            addLinksToListCertificate(orderDto.getGiftCertificateList());
+
+            UserDto user = orderDto.getUser();
+            user.add(linkTo(methodOn(UserController.class).read(user.getId())).withRel("user"));
         }
     }
 

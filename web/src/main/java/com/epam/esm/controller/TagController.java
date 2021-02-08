@@ -37,7 +37,7 @@ public class TagController extends HATEOASController<TagDto> {
             @RequestParam(value = "page", required = false, defaultValue = "1") int page,
             @RequestParam(value = "size", required = false, defaultValue = "4") int size) {
         List<TagDto> tags = service.readAll(page, size);
-        HATEOASBuilder.addLinksToListTagDto(tags);
+        HATEOASBuilder.addLinksToListTag(tags);
         return addPagination(TagController.class, tags, page, size, service.getCountOfEntities());
     }
 
@@ -49,7 +49,7 @@ public class TagController extends HATEOASController<TagDto> {
      */
     @GetMapping("/tag/{id}")
     public TagDto read(@PathVariable int id) {
-        return HATEOASBuilder.addLinksToTagDto(service.read(id));
+        return HATEOASBuilder.addLinksToTag(service.read(id));
     }
 
     /**

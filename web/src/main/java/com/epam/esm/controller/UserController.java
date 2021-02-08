@@ -47,6 +47,6 @@ public class UserController extends HATEOASController<UserDto> {
     @GetMapping("/user/{userID}")
     public UserDto read(@PathVariable int userID) {
 
-        return userService.read(userID);
+        return HATEOASBuilder.addLinksToUser(userService.read(userID));
     }
 }
