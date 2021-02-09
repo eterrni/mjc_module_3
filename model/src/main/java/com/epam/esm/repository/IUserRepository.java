@@ -30,4 +30,11 @@ public interface IUserRepository {
      * @return number of exist users.
      */
     long getCountOfEntities();
+
+    /**
+     * Get User with highest cost of all orders.
+     *
+     * @return {@link User}
+     */
+    User getUserWithHighestCostOfAllOrders();
 }

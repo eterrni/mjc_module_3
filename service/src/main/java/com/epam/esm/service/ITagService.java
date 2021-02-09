@@ -14,4 +14,11 @@ public interface ITagService extends ICRDService<TagDto, Integer> {
      * @return number of exist tags.
      */
     long getCountOfEntities();
+
+    /**
+     * Get the most widely used tag from user with highest cost of all orders.
+     *
+     * @return {@link TagDto}
+     */
+    TagDto getMostWidelyUsedTagFromUserWithHighestCostOfAllOrders();
 }

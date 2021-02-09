@@ -4,6 +4,7 @@ import com.epam.esm.dto.TagDto;
 import com.epam.esm.service.tag.TagService;
 import com.epam.esm.util.HATEOASBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.PagedModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -73,6 +74,11 @@ public class TagController extends HATEOASController<TagDto> {
     public ResponseEntity<Void> delete(@PathVariable int id) {
         service.delete(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+
+    @GetMapping("/tag/getMostWidelyUsedTagFromUserWithHighestCostOfAllOrders")
+    public TagDto getMostWidelyUsedTagFromUserWithHighestCostOfAllOrders(){
+        return service.getMostWidelyUsedTagFromUserWithHighestCostOfAllOrders();
     }
 
 }

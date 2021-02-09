@@ -22,4 +22,11 @@ public interface ITagRepository extends ICRDRepository<Tag, Integer> {
      * @return number of exist tags
      */
     long getCountOfEntities();
+
+    /**
+     * Get the most widely used tag from user with highest cost of all orders.
+     *
+     * @return {@link Tag}
+     */
+    Tag getMostWidelyUsedTagFromUser(int userID);
 }
