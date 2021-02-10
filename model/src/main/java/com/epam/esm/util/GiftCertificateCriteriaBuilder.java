@@ -3,15 +3,20 @@ package com.epam.esm.util;
 import com.epam.esm.entity.GiftCertificate;
 import com.epam.esm.entity.Tag;
 
+import javax.persistence.EntityManager;
 import javax.persistence.criteria.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 public final class GiftCertificateCriteriaBuilder {
-
     private static final GiftCertificateCriteriaBuilder instance = new GiftCertificateCriteriaBuilder();
     private static final String SYMBOL = "%";
+    private static final String PARAMETER_TAG_NAME_LIST = "tagNames";
+
+    private static final String SELECT_TAG_BY_NAME =
+            "from Tag tag where tag.name in (:" + PARAMETER_TAG_NAME_LIST + ")";
 
     private GiftCertificateCriteriaBuilder() {
     }
@@ -20,8 +25,8 @@ public final class GiftCertificateCriteriaBuilder {
         return instance;
     }
 
-    public CriteriaQuery<GiftCertificate> build(CriteriaBuilder criteriaBuilder, GiftCertificateQueryParameter giftCertificateQueryParameter) {
-
+    public CriteriaQuery<GiftCertificate> build(EntityManager entityManager, GiftCertificateQueryParameter giftCertificateQueryParameter) {
+        CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
         CriteriaQuery<GiftCertificate> criteriaQuery = criteriaBuilder.createQuery(GiftCertificate.class);
         Root<GiftCertificate> giftCertificateRoot = criteriaQuery.from(GiftCertificate.class);
 
@@ -41,11 +46,18 @@ public final class GiftCertificateCriteriaBuilder {
             predicateList.add(predicate);
         }
 
-        String tagName = giftCertificateQueryParameter.getTagName();
-        if (Objects.nonNull(tagName)) {
-            Join<GiftCertificate, Tag> tagJoin = giftCertificateRoot.join("tags");
-            Predicate predicate = criteriaBuilder.equal(tagJoin.get("name"), tagName);
-            predicateList.add(predicate);
+        List<String> tagNameList = giftCertificateQueryParameter.getTagName();
+        if (tagNameList != null) {
+            List<String> tagNamesWithoutDuplicates = tagNameList.stream().distinct().collect(Collectors.toList());
+
+            List<Tag> tags = entityManager.createQuery(SELECT_TAG_BY_NAME, Tag.class)
+                    .setParameter(PARAMETER_TAG_NAME_LIST, tagNamesWithoutDuplicates).getResultList();
+
+            if (tags.size() != tagNamesWithoutDuplicates.size()) {
+                return criteriaQuery;
+            }
+
+            tags.forEach(tag -> predicateList.add(criteriaBuilder.isMember(tag, giftCertificateRoot.get("tags"))));
         }
 
         criteriaQuery.select(giftCertificateRoot).where(predicateList.toArray(new Predicate[0]));
@@ -59,11 +71,13 @@ public final class GiftCertificateCriteriaBuilder {
             if (Objects.isNull(orderType)) {
                 orderType = OrderType.ASC;
             }
-
-            if (sortType == SortType.NAME) {
-                columnNameToSort = "name";
-            } else if (sortType == SortType.CREATE_DATE) {
-                columnNameToSort = "createDate";
+            switch (sortType) {
+                case NAME:
+                    columnNameToSort = "name";
+                    break;
+                case CREATE_DATE:
+                    columnNameToSort = "createDate";
+                    break;
             }
         }
 

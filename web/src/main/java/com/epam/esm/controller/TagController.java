@@ -2,9 +2,7 @@ package com.epam.esm.controller;
 
 import com.epam.esm.dto.TagDto;
 import com.epam.esm.service.tag.TagService;
-import com.epam.esm.util.HATEOASBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.PagedModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -38,8 +36,8 @@ public class TagController extends HATEOASController<TagDto> {
             @RequestParam(value = "page", required = false, defaultValue = "1") int page,
             @RequestParam(value = "size", required = false, defaultValue = "4") int size) {
         List<TagDto> tags = service.readAll(page, size);
-        HATEOASBuilder.addLinksToListTag(tags);
-        return addPagination(TagController.class, tags, page, size, service.getCountOfEntities());
+        addLinksToListTag(tags);
+        return addPagination(tags, page, size, service.getCountOfEntities());
     }
 
     /**
@@ -50,7 +48,7 @@ public class TagController extends HATEOASController<TagDto> {
      */
     @GetMapping("/tag/{id}")
     public TagDto read(@PathVariable int id) {
-        return HATEOASBuilder.addLinksToTag(service.read(id));
+        return addLinksToTag(service.read(id));
     }
 
     /**
@@ -77,7 +75,7 @@ public class TagController extends HATEOASController<TagDto> {
     }
 
     @GetMapping("/tag/mostUsedTag")
-    public TagDto getMostWidelyUsedTagFromUserWithHighestCostOfAllOrders(){
+    public TagDto getMostWidelyUsedTagFromUserWithHighestCostOfAllOrders() {
         return service.getMostWidelyUsedTagFromUserWithHighestCostOfAllOrders();
     }
 

@@ -3,7 +3,6 @@ package com.epam.esm.controller;
 import com.epam.esm.dto.GiftCertificateDto;
 import com.epam.esm.service.certificate.GiftCertificateService;
 import com.epam.esm.util.GiftCertificateQueryParameter;
-import com.epam.esm.util.HATEOASBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.PagedModel;
 import org.springframework.http.HttpStatus;
@@ -19,7 +18,7 @@ import java.util.List;
  */
 @RestController
 @RequestMapping("/api")
-public class GiftCertificateController {
+public class GiftCertificateController extends HATEOASController<GiftCertificateDto> {
 
     private final GiftCertificateService service;
 
@@ -40,8 +39,8 @@ public class GiftCertificateController {
             @RequestParam(value = "size", required = false, defaultValue = "4") int size,
             GiftCertificateQueryParameter parameter) {
         List<GiftCertificateDto> certificateDtoList = service.readAll(parameter, page, size);
-        HATEOASBuilder.addLinksToListCertificate(certificateDtoList);
-        return HATEOASBuilder.addPaginationToCertificates(certificateDtoList, parameter, page, size, service.getCountOfEntities(parameter));
+        addLinksToListCertificate(certificateDtoList);
+        return addPagination(certificateDtoList, page, size, service.getCountOfEntities(parameter));
     }
 
     /**
@@ -52,7 +51,7 @@ public class GiftCertificateController {
      */
     @GetMapping("/gift-certificate/{id}")
     public GiftCertificateDto read(@PathVariable int id) {
-        return HATEOASBuilder.addLinksToCertificate(service.read(id));
+        return addLinksToCertificate(service.read(id));
     }
 
     /**

@@ -2,7 +2,6 @@ package com.epam.esm.controller;
 
 import com.epam.esm.dto.UserDto;
 import com.epam.esm.service.user.UserService;
-import com.epam.esm.util.HATEOASBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.PagedModel;
 import org.springframework.web.bind.annotation.*;
@@ -34,8 +33,8 @@ public class UserController extends HATEOASController<UserDto> {
             @RequestParam(value = "page", required = false, defaultValue = "1") int page,
             @RequestParam(value = "size", required = false, defaultValue = "4") int size) {
         List<UserDto> userDtoList = userService.readAll(page, size);
-        HATEOASBuilder.addLinksToListUser(userDtoList);
-        return addPagination(UserController.class, userDtoList, page, size, userService.getCountOfEntities());
+        addLinksToListUser(userDtoList);
+        return addPagination(userDtoList, page, size, userService.getCountOfEntities());
     }
 
     /**
@@ -47,6 +46,6 @@ public class UserController extends HATEOASController<UserDto> {
     @GetMapping("/user/{userID}")
     public UserDto read(@PathVariable int userID) {
 
-        return HATEOASBuilder.addLinksToUser(userService.read(userID));
+        return addLinksToUser(userService.read(userID));
     }
 }

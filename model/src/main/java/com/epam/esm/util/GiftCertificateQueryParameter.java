@@ -4,28 +4,26 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
 
+import java.util.List;
+
 @NoArgsConstructor
 @Data
 public final class GiftCertificateQueryParameter {
     private String name;
     private String description;
-    private String tagName;
+    private List<String> tagName;
     private SortType sortType;
     private OrderType orderType;
 
-    public GiftCertificateQueryParameter(String tagName) {
-        setTagName(tagName);
-    }
-
-    public GiftCertificateQueryParameter(String name, String description, String tagName, String sortType, String orderType) {
+    public GiftCertificateQueryParameter(String name, String description, List<String> tagName, String sortType, String orderType) {
         if (!StringUtils.isEmpty(name)) {
             setName(name);
         }
         if (!StringUtils.isEmpty(description)) {
             setDescription(description);
         }
-        if (!StringUtils.isEmpty(tagName)) {
-            setTagName(tagName);
+        if (tagName != null && !tagName.isEmpty()) {
+            this.tagName = tagName;
         }
         if (!StringUtils.isEmpty(sortType)) {
             setSortType(sortType.toUpperCase());

@@ -3,7 +3,6 @@ package com.epam.esm.controller;
 import com.epam.esm.dto.OrderDto;
 import com.epam.esm.service.order.OrderService;
 import com.epam.esm.util.CreateParameterOrder;
-import com.epam.esm.util.HATEOASBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.PagedModel;
 import org.springframework.http.HttpStatus;
@@ -37,8 +36,8 @@ public class OrderController extends HATEOASController<OrderDto> {
             @RequestParam(value = "page", required = false, defaultValue = "1") int page,
             @RequestParam(value = "size", required = false, defaultValue = "4") int size) {
         List<OrderDto> orderDtoList = orderService.readAll(page, size);
-        HATEOASBuilder.addLinksToListOrder(orderDtoList);
-        return addPagination(OrderController.class, orderDtoList, page, size, orderService.getCountOfEntities());
+        addLinksToListOrder(orderDtoList);
+        return addPagination(orderDtoList, page, size, orderService.getCountOfEntities());
     }
 
     /**
@@ -50,7 +49,7 @@ public class OrderController extends HATEOASController<OrderDto> {
     @GetMapping(value = "/orders", params = "user")
     public List<OrderDto> readByUserId(@RequestParam(value = "user") int userID) {
         List<OrderDto> orderDtoList = orderService.readOrdersByUserID(userID);
-        HATEOASBuilder.addLinksToListOrder(orderDtoList);
+        addLinksToListOrder(orderDtoList);
         return orderDtoList;
     }
 
@@ -62,7 +61,7 @@ public class OrderController extends HATEOASController<OrderDto> {
      */
     @GetMapping("/order/{orderID}")
     public OrderDto read(@PathVariable int orderID) {
-        return HATEOASBuilder.addLinksToOrder(orderService.read(orderID));
+        return addLinksToOrder(orderService.read(orderID));
     }
 
     /**

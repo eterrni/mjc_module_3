@@ -32,8 +32,7 @@ public class GiftCertificateRepository implements IGiftCertificateRepository {
 
     @Override
     public List<GiftCertificate> readAll(GiftCertificateQueryParameter parameter, int offset, int limit) {
-        CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
-        CriteriaQuery<GiftCertificate> criteriaQuery = GiftCertificateCriteriaBuilder.getInstance().build(criteriaBuilder, parameter);
+        CriteriaQuery<GiftCertificate> criteriaQuery = GiftCertificateCriteriaBuilder.getInstance().build(entityManager, parameter);
 
         return entityManager.createQuery(criteriaQuery)
                 .setFirstResult(offset)
@@ -64,8 +63,7 @@ public class GiftCertificateRepository implements IGiftCertificateRepository {
 
     @Override
     public long getCountOfEntities(GiftCertificateQueryParameter parameter) {
-        CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
-        CriteriaQuery<GiftCertificate> criteriaQuery = GiftCertificateCriteriaBuilder.getInstance().build(criteriaBuilder, parameter);
+        CriteriaQuery<GiftCertificate> criteriaQuery = GiftCertificateCriteriaBuilder.getInstance().build(entityManager, parameter);
         return entityManager.createQuery(criteriaQuery).getResultList().size();
 
     }
