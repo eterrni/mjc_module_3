@@ -2,7 +2,6 @@ package com.epam.esm.repository.certificate;
 
 import com.epam.esm.entity.GiftCertificate;
 import com.epam.esm.repository.IGiftCertificateRepository;
-import com.epam.esm.util.GiftCertificateCriteriaBuilder;
 import com.epam.esm.util.GiftCertificateQueryParameter;
 import org.springframework.stereotype.Repository;
 
@@ -12,6 +11,8 @@ import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 import java.util.List;
+
+import static com.epam.esm.util.GiftCertificateCriteriaBuilder.build;
 
 @Repository
 public class GiftCertificateRepository implements IGiftCertificateRepository {
@@ -32,8 +33,7 @@ public class GiftCertificateRepository implements IGiftCertificateRepository {
 
     @Override
     public List<GiftCertificate> readAll(GiftCertificateQueryParameter parameter, int offset, int limit) {
-        CriteriaQuery<GiftCertificate> criteriaQuery = GiftCertificateCriteriaBuilder.getInstance().build(entityManager, parameter);
-
+        CriteriaQuery<GiftCertificate> criteriaQuery = build(entityManager, parameter);
         return entityManager.createQuery(criteriaQuery)
                 .setFirstResult(offset)
                 .setMaxResults(limit)
@@ -63,9 +63,8 @@ public class GiftCertificateRepository implements IGiftCertificateRepository {
 
     @Override
     public long getCountOfEntities(GiftCertificateQueryParameter parameter) {
-        CriteriaQuery<GiftCertificate> criteriaQuery = GiftCertificateCriteriaBuilder.getInstance().build(entityManager, parameter);
+        CriteriaQuery<GiftCertificate> criteriaQuery = build(entityManager, parameter);
         return entityManager.createQuery(criteriaQuery).getResultList().size();
-
     }
 
     @Override
@@ -75,6 +74,5 @@ public class GiftCertificateRepository implements IGiftCertificateRepository {
         query.select(builder.count(query.from(GiftCertificate.class)));
         return entityManager.createQuery(query).getSingleResult();
     }
-
 
 }

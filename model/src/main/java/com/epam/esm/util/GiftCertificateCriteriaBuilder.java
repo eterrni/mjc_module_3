@@ -11,21 +11,14 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 
 public final class GiftCertificateCriteriaBuilder {
-    private static final GiftCertificateCriteriaBuilder instance = new GiftCertificateCriteriaBuilder();
     private static final String SYMBOL = "%";
     private static final String PARAMETER_TAG_NAME_LIST = "tagNames";
-
-    private static final String SELECT_TAG_BY_NAME =
-            "from Tag tag where tag.name in (:" + PARAMETER_TAG_NAME_LIST + ")";
+    private static final String SELECT_TAG_BY_NAME = "from Tag tag where tag.name in (:" + PARAMETER_TAG_NAME_LIST + ")";
 
     private GiftCertificateCriteriaBuilder() {
     }
 
-    public static GiftCertificateCriteriaBuilder getInstance() {
-        return instance;
-    }
-
-    public CriteriaQuery<GiftCertificate> build(EntityManager entityManager, GiftCertificateQueryParameter giftCertificateQueryParameter) {
+    public static CriteriaQuery<GiftCertificate> build(EntityManager entityManager, GiftCertificateQueryParameter giftCertificateQueryParameter) {
         CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
         CriteriaQuery<GiftCertificate> criteriaQuery = criteriaBuilder.createQuery(GiftCertificate.class);
         Root<GiftCertificate> giftCertificateRoot = criteriaQuery.from(GiftCertificate.class);
@@ -68,9 +61,6 @@ public final class GiftCertificateCriteriaBuilder {
         String columnNameToSort = null;
 
         if (Objects.nonNull(sortType)) {
-            if (Objects.isNull(orderType)) {
-                orderType = OrderType.ASC;
-            }
             switch (sortType) {
                 case NAME:
                     columnNameToSort = "name";
