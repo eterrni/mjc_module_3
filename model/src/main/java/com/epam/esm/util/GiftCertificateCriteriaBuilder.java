@@ -8,10 +8,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-public class GiftCertificateCriteriaBuilder {
+public final class GiftCertificateCriteriaBuilder {
 
     private static final GiftCertificateCriteriaBuilder instance = new GiftCertificateCriteriaBuilder();
-    private static final String ANY_SYMBOL = "%";
+    private static final String SYMBOL = "%";
 
     private GiftCertificateCriteriaBuilder() {
     }
@@ -30,14 +30,14 @@ public class GiftCertificateCriteriaBuilder {
         String name = giftCertificateQueryParameter.getName();
         if (Objects.nonNull(name)) {
             Predicate predicate = criteriaBuilder.like(giftCertificateRoot.get("name"),
-                    ANY_SYMBOL + name + ANY_SYMBOL);
+                    SYMBOL + name + SYMBOL);
             predicateList.add(predicate);
         }
 
         String description = giftCertificateQueryParameter.getDescription();
         if (Objects.nonNull(description)) {
             Predicate predicate = criteriaBuilder.like(giftCertificateRoot.get("description"),
-                    ANY_SYMBOL + description + ANY_SYMBOL);
+                    SYMBOL + description + SYMBOL);
             predicateList.add(predicate);
         }
 

@@ -6,7 +6,7 @@ import org.apache.commons.lang3.StringUtils;
 
 @NoArgsConstructor
 @Data
-public class GiftCertificateQueryParameter {
+public final class GiftCertificateQueryParameter {
     private String name;
     private String description;
     private String tagName;

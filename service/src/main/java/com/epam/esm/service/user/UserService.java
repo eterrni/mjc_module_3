@@ -42,7 +42,7 @@ public class UserService implements IUserService {
                 .collect(Collectors.toList());
     }
 
-    public long getCountOfEntities(){
+    public long getCountOfEntities() {
         return userRepository.getCountOfEntities();
     }
 }

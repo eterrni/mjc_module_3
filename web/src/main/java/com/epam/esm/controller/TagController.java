@@ -76,7 +76,7 @@ public class TagController extends HATEOASController<TagDto> {
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
-    @GetMapping("/tag/getMostWidelyUsedTagFromUserWithHighestCostOfAllOrders")
+    @GetMapping("/tag/mostUsedTag")
     public TagDto getMostWidelyUsedTagFromUserWithHighestCostOfAllOrders(){
         return service.getMostWidelyUsedTagFromUserWithHighestCostOfAllOrders();
     }
