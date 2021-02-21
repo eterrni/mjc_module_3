@@ -28,10 +28,12 @@ public class UserService implements IUserService {
 
     @Override
     public UserDto read(int id) {
-        User read = userRepository.read(id);
-        if (read == null) {
+        User readedUser = userRepository.read(id);
+        if (readedUser == null) {
             throw new NotExistIdEntityException("There is no user with ID = " + id + " in Database");
-        } else return modelMapper.map(read, UserDto.class);
+        } else {
+            return modelMapper.map(readedUser, UserDto.class);
+        }
     }
 
     @Override

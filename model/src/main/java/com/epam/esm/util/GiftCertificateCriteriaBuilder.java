@@ -39,7 +39,7 @@ public final class GiftCertificateCriteriaBuilder {
             predicateList.add(predicate);
         }
 
-        List<String> tagNameList = giftCertificateQueryParameter.getTagName();
+        List<String> tagNameList = giftCertificateQueryParameter.getTagNamesList();
         if (tagNameList != null) {
             List<String> tagNamesWithoutDuplicates = tagNameList.stream().distinct().collect(Collectors.toList());
 

@@ -57,10 +57,12 @@ public class GiftCertificateService implements IGiftCertificateService {
 
     @Override
     public GiftCertificateDto read(final Integer id) {
-        GiftCertificate read = giftCertificateRepository.read(id);
-        if (read == null) {
+        GiftCertificate readedGiftCertificate = giftCertificateRepository.read(id);
+        if (readedGiftCertificate == null) {
             throw new NotExistIdEntityException("There is no gift certificate with ID = " + id + " in Database");
-        } else return modelMapper.map(read, GiftCertificateDto.class);
+        } else {
+            return modelMapper.map(readedGiftCertificate, GiftCertificateDto.class);
+        }
     }
 
     @Override
@@ -96,10 +98,12 @@ public class GiftCertificateService implements IGiftCertificateService {
 
     @Override
     public void delete(final Integer id) {
-        GiftCertificate read = giftCertificateRepository.read(id);
-        if (read == null) {
+        GiftCertificate readedGiftCertificate = giftCertificateRepository.read(id);
+        if (readedGiftCertificate == null) {
             throw new NotExistIdEntityException("There is no gift certificate with ID = " + id + " in Database");
-        } else giftCertificateRepository.delete(id);
+        } else {
+            giftCertificateRepository.delete(id);
+        }
     }
 
     @Override

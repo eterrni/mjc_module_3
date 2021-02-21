@@ -47,10 +47,12 @@ public class OrderService implements IOrderService {
 
     @Override
     public OrderDto read(int id) {
-        Order read = orderRepository.read(id);
-        if (read == null) {
+        Order readedOrder = orderRepository.read(id);
+        if (readedOrder == null) {
             throw new NotExistIdEntityException("There is no order with ID = " + id + " in Database");
-        } else return modelMapper.map(read, OrderDto.class);
+        } else {
+            return modelMapper.map(readedOrder, OrderDto.class);
+        }
     }
 
     @Override

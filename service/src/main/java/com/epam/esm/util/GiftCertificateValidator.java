@@ -23,20 +23,14 @@ public final class GiftCertificateValidator {
     }
 
     public static boolean validateForUpdate(GiftCertificateDto giftCertificateDto) {
-        if (Objects.nonNull(giftCertificateDto.getName())) {
-            if (!validateName(giftCertificateDto.getName())) {
-                return false;
-            }
+        if (Objects.nonNull(giftCertificateDto.getName()) && !validateName(giftCertificateDto.getName())) {
+            return false;
         }
-        if (Objects.nonNull(giftCertificateDto.getPrice())) {
-            if (!validatePrice(giftCertificateDto.getPrice())) {
-                return false;
-            }
+        if (Objects.nonNull(giftCertificateDto.getPrice()) && !validatePrice(giftCertificateDto.getPrice())) {
+            return false;
         }
-        if (Objects.nonNull(giftCertificateDto.getDuration())) {
-            if (!validateDuration(giftCertificateDto.getDuration())) {
-                return false;
-            }
+        if (Objects.nonNull(giftCertificateDto.getDuration()) && !validateDuration(giftCertificateDto.getDuration())) {
+            return false;
         }
         if (Objects.nonNull(giftCertificateDto.getDescription())) {
             return validateDescription(giftCertificateDto.getDescription());

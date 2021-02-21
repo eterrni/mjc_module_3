@@ -46,10 +46,12 @@ public class TagService implements ITagService {
 
     @Override
     public TagDto read(final Integer tagId) {
-        Tag read = tagRepository.read(tagId);
-        if (read == null) {
+        Tag readedTag = tagRepository.read(tagId);
+        if (readedTag == null) {
             throw new NotExistIdEntityException("There is no tag with ID = " + tagId + " in Database");
-        } else return modelMapper.map(read, TagDto.class);
+        } else {
+            return modelMapper.map(readedTag, TagDto.class);
+        }
     }
 
     @Override
@@ -68,10 +70,12 @@ public class TagService implements ITagService {
 
     @Override
     public void delete(final Integer tagId) {
-        Tag read = tagRepository.read(tagId);
-        if (read == null) {
+        Tag readedTag = tagRepository.read(tagId);
+        if (readedTag == null) {
             throw new NotExistIdEntityException("There is no tag with ID = " + tagId + " in Database");
-        } else tagRepository.delete(tagId);
+        } else {
+            tagRepository.delete(tagId);
+        }
     }
 
     @Override
