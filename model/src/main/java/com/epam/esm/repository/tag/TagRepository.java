@@ -1,20 +1,31 @@
 package com.epam.esm.repository.tag;
 
-import com.epam.esm.entity.GiftCertificate;
-import com.epam.esm.entity.Order;
 import com.epam.esm.entity.Tag;
-import com.epam.esm.entity.User;
 import com.epam.esm.repository.ITagRepository;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import javax.persistence.criteria.*;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Root;
 import java.util.List;
 import java.util.Optional;
 
 @Repository
 public class TagRepository implements ITagRepository {
+
+    private static final String SELECT_MOST_USED_TAG = "WITH user_with_biggest_cost AS \n" +
+            "(SELECT sum(price) AS orders_cost,\n" +
+            "user_id_user AS ui FROM orders\n" +
+            "GROUP BY user_id_user ORDER BY orders_cost DESC LIMIT 1)\n" +
+            "SELECT tag.id_tag, tag.name_tag FROM tag\n" +
+            "JOIN gift_certificate_has_tag ON tag.id_tag = gift_certificate_has_tag.tag_id_tag\n" +
+            "JOIN gift_certificate ON gift_certificate_has_tag.gift_certificate_id_gift_certificate = gift_certificate.id\n" +
+            "JOIN gift_certificate_has_orders ON gift_certificate.id = gift_certificate_has_orders.gift_certificate_id\n" +
+            "JOIN orders ON gift_certificate_has_orders.orders_id_order = orders.id_order\n" +
+            "JOIN user_with_biggest_cost on orders.user_id_user = user_with_biggest_cost.ui\n" +
+            "GROUP BY (tag.id_tag) ORDER BY COUNT(tag.id_tag) DESC LIMIT 1;";
 
     @PersistenceContext
     private EntityManager entityManager;
@@ -62,23 +73,8 @@ public class TagRepository implements ITagRepository {
     }
 
     @Override
-    public Tag getMostWidelyUsedTagFromUser(int userID) {
-
-        CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
-        CriteriaQuery<Tag> tagQuery = criteriaBuilder.createQuery(Tag.class);
-        Root<User> userRoot = tagQuery.from(User.class);
-
-        ListJoin<User, Order> orderList = userRoot.joinList("orderList");
-        ListJoin<Order, GiftCertificate> giftList = orderList.joinList("giftCertificateList");
-        ListJoin<GiftCertificate, Tag> tagList = giftList.joinList("tags");
-
-        Expression orderID = tagList.get("id");
-        tagQuery.select(tagList)
-                .where(criteriaBuilder.equal(userRoot.get("id"), userID))
-                .groupBy(orderID)
-                .orderBy(criteriaBuilder.desc(criteriaBuilder.count(orderID)));
-
-        return entityManager.createQuery(tagQuery).setMaxResults(1).getSingleResult();
+    public Tag getMostWidelyUsedTagFromUser() {
+        return (Tag) entityManager.createNativeQuery(SELECT_MOST_USED_TAG, Tag.class).getSingleResult();
     }
 
 }

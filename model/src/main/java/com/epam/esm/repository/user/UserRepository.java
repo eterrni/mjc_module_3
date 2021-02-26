@@ -14,9 +14,6 @@ import java.util.List;
 @Repository
 public class UserRepository implements IUserRepository {
 
-    private static final String SELECT_USER_WITH_HIGHEST_COST_OF_ALL_ORDERS = "select orders.user from Order orders " +
-            "group by orders.user order by sum(orders.price) desc";
-
     @PersistenceContext
     private EntityManager entityManager;
 
@@ -44,9 +41,4 @@ public class UserRepository implements IUserRepository {
         return entityManager.createQuery(query).getSingleResult();
     }
 
-    @Override
-    public User getUserWithHighestCostOfAllOrders() {
-        return entityManager.createQuery(SELECT_USER_WITH_HIGHEST_COST_OF_ALL_ORDERS, User.class)
-                .setMaxResults(1).getSingleResult();
-    }
 }

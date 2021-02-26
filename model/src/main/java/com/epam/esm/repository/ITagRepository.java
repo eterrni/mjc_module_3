@@ -28,5 +28,5 @@ public interface ITagRepository extends ICRDRepository<Tag, Integer> {
      *
      * @return {@link Tag}
      */
-    Tag getMostWidelyUsedTagFromUser(int userID);
+    Tag getMostWidelyUsedTagFromUser();
 }

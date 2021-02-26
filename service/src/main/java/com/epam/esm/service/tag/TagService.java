@@ -2,11 +2,9 @@ package com.epam.esm.service.tag;
 
 import com.epam.esm.dto.TagDto;
 import com.epam.esm.entity.Tag;
-import com.epam.esm.entity.User;
 import com.epam.esm.exception.DuplicateNameException;
 import com.epam.esm.exception.NotExistIdEntityException;
 import com.epam.esm.repository.tag.TagRepository;
-import com.epam.esm.repository.user.UserRepository;
 import com.epam.esm.service.ITagService;
 import com.epam.esm.util.Page;
 import com.epam.esm.util.TagValidator;
@@ -24,13 +22,11 @@ public class TagService implements ITagService {
 
     private TagRepository tagRepository;
     private ModelMapper modelMapper;
-    private UserRepository userRepository;
 
     @Autowired
-    public TagService(TagRepository tagRepository, ModelMapper modelMapper, UserRepository userRepository) {
+    public TagService(TagRepository tagRepository, ModelMapper modelMapper) {
         this.tagRepository = tagRepository;
         this.modelMapper = modelMapper;
-        this.userRepository = userRepository;
     }
 
     @Override
@@ -79,9 +75,7 @@ public class TagService implements ITagService {
 
     @Override
     public TagDto getMostWidelyUsedTagFromUserWithHighestCostOfAllOrders() {
-        User user = userRepository.getUserWithHighestCostOfAllOrders();
-        Tag tag = tagRepository.getMostWidelyUsedTagFromUser(user.getId());
-        return modelMapper.map(tag, TagDto.class);
+        return modelMapper.map(tagRepository.getMostWidelyUsedTagFromUser(), TagDto.class);
     }
 
 }
