@@ -8,6 +8,7 @@ import org.springframework.hateoas.PagedModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Collection;
 import java.util.List;
 
 /**
@@ -32,7 +33,7 @@ public class OrderController extends HATEOASController<OrderDto> {
      * @return List of {@link OrderDto} objects with Order data.
      */
     @GetMapping("/orders")
-    public PagedModel<OrderDto> readAll(
+    public Collection<OrderDto> readAll(
             @RequestParam(value = "page", required = false, defaultValue = "1") int page,
             @RequestParam(value = "size", required = false, defaultValue = "4") int size) {
         List<OrderDto> orderDtoList = orderService.readAll(page, size);

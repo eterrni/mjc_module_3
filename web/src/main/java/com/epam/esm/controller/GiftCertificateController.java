@@ -1,14 +1,16 @@
 package com.epam.esm.controller;
 
 import com.epam.esm.dto.GiftCertificateDto;
+import com.epam.esm.exception.RemoveCertificateException;
 import com.epam.esm.service.certificate.GiftCertificateService;
 import com.epam.esm.util.GiftCertificateQueryParameter;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.hateoas.PagedModel;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Collection;
 import java.util.List;
 
 /**
@@ -34,7 +36,7 @@ public class GiftCertificateController extends HATEOASController<GiftCertificate
      * @return List of {@link GiftCertificateDto} objects with GiftCertificate data.
      */
     @GetMapping("/gift-certificates")
-    public PagedModel<GiftCertificateDto> readAll(
+    public Collection<GiftCertificateDto> readAll(
             @RequestParam(value = "page", required = false, defaultValue = "1") int page,
             @RequestParam(value = "size", required = false, defaultValue = "4") int size,
             GiftCertificateQueryParameter parameter) {
@@ -85,7 +87,11 @@ public class GiftCertificateController extends HATEOASController<GiftCertificate
      */
     @DeleteMapping("/gift-certificate/{id}")
     public ResponseEntity<Void> delete(@PathVariable int id) {
-        service.delete(id);
+        try {
+            service.delete(id);
+        } catch (DataIntegrityViolationException exception) {
+            throw new RemoveCertificateException("Can't delete a certificate that exists in an order", exception);
+        }
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 

@@ -8,6 +8,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Collection;
 import java.util.List;
 
 /**
@@ -32,7 +33,7 @@ public class TagController extends HATEOASController<TagDto> {
      * @return List of found tags
      */
     @GetMapping("/tags")
-    public PagedModel<TagDto> readAll(
+    public Collection<TagDto> readAll(
             @RequestParam(value = "page", required = false, defaultValue = "1") int page,
             @RequestParam(value = "size", required = false, defaultValue = "4") int size) {
         List<TagDto> tags = service.readAll(page, size);

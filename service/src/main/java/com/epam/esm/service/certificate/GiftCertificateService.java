@@ -3,7 +3,6 @@ package com.epam.esm.service.certificate;
 import com.epam.esm.dto.GiftCertificateDto;
 import com.epam.esm.entity.GiftCertificate;
 import com.epam.esm.entity.Tag;
-import com.epam.esm.exception.InvalidDataExeception;
 import com.epam.esm.exception.NotExistIdEntityException;
 import com.epam.esm.repository.certificate.GiftCertificateRepository;
 import com.epam.esm.repository.tag.TagRepository;
@@ -67,10 +66,7 @@ public class GiftCertificateService implements IGiftCertificateService {
 
     @Override
     public GiftCertificateDto create(GiftCertificateDto giftCertificateDto) {
-        if (!GiftCertificateValidator.validateForCreate(giftCertificateDto)) {
-            throw new InvalidDataExeception("Invalid data for creating a certificate");
-        }
-
+        GiftCertificateValidator.validateForCreate(giftCertificateDto);
         GiftCertificate giftCertificate = modelMapper.map(giftCertificateDto, GiftCertificate.class);
         createAndSetTags(giftCertificate);
         giftCertificateRepository.create(giftCertificate);
@@ -80,9 +76,7 @@ public class GiftCertificateService implements IGiftCertificateService {
     @Override
     public GiftCertificateDto update(GiftCertificateDto modifiedGiftCertificateDto) {
 
-        if (!GiftCertificateValidator.validateForUpdate(modifiedGiftCertificateDto)) {
-            throw new InvalidDataExeception("Invalid data for update a certificate");
-        }
+        GiftCertificateValidator.validateForUpdate(modifiedGiftCertificateDto);
 
         GiftCertificate readGiftCertificate = giftCertificateRepository.read(modifiedGiftCertificateDto.getId());
         if (readGiftCertificate == null) {

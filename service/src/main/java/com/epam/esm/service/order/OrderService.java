@@ -4,12 +4,14 @@ import com.epam.esm.dto.OrderDto;
 import com.epam.esm.entity.GiftCertificate;
 import com.epam.esm.entity.Order;
 import com.epam.esm.entity.User;
+import com.epam.esm.exception.InvalidDataExeception;
 import com.epam.esm.exception.NotExistIdEntityException;
 import com.epam.esm.repository.certificate.GiftCertificateRepository;
 import com.epam.esm.repository.order.OrderRepository;
 import com.epam.esm.repository.user.UserRepository;
 import com.epam.esm.service.IOrderService;
 import com.epam.esm.util.CreateParameterOrder;
+import com.epam.esm.util.OrderValidator;
 import com.epam.esm.util.Page;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -65,7 +67,7 @@ public class OrderService implements IOrderService {
     @Override
     @Transactional
     public OrderDto create(CreateParameterOrder createParameterOrder) {
-
+        OrderValidator.validateForCreate(createParameterOrder);
         int userId = createParameterOrder.getUserID();
         User user = userRepository.read(userId);
         if (user == null) {

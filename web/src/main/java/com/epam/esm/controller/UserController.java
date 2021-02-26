@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.PagedModel;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Collection;
 import java.util.List;
 
 /**
@@ -29,12 +30,12 @@ public class UserController extends HATEOASController<UserDto> {
      * @return List of {@link UserDto} objects with User data.
      */
     @GetMapping("/users")
-    public PagedModel<UserDto> readAll(
+    public Collection<UserDto> readAll(
             @RequestParam(value = "page", required = false, defaultValue = "1") int page,
             @RequestParam(value = "size", required = false, defaultValue = "4") int size) {
         List<UserDto> userDtoList = userService.readAll(page, size);
         addLinksToListUser(userDtoList);
-        return addPagination(userDtoList, page, size, userService.getCountOfEntities());
+        return addPagination(userDtoList,page,size,userService.getCountOfEntities());
     }
 
     /**

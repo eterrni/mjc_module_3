@@ -46,7 +46,7 @@ public class UserRepository implements IUserRepository {
 
     @Override
     public User getUserWithHighestCostOfAllOrders() {
-        return (User) entityManager.createQuery(SELECT_USER_WITH_HIGHEST_COST_OF_ALL_ORDERS)
+        return entityManager.createQuery(SELECT_USER_WITH_HIGHEST_COST_OF_ALL_ORDERS, User.class)
                 .setMaxResults(1).getSingleResult();
     }
 }

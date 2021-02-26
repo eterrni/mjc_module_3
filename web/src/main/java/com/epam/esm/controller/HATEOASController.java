@@ -6,6 +6,7 @@ import com.epam.esm.dto.TagDto;
 import com.epam.esm.dto.UserDto;
 import org.springframework.hateoas.PagedModel;
 
+import java.util.Collection;
 import java.util.List;
 
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
@@ -13,9 +14,9 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 public abstract class HATEOASController<T> {
 
-    protected PagedModel<T> addPagination(List<T> entities, int page, int size, long countOfEntities) {
+    protected Collection<T> addPagination(List<T> entities, int page, int size, long countOfEntities) {
         PagedModel.PageMetadata pageMetadata = new PagedModel.PageMetadata(size, page, countOfEntities);
-        return PagedModel.of(entities, pageMetadata);
+        return PagedModel.of(entities, pageMetadata).getContent();
     }
 
     public static GiftCertificateDto addLinksToCertificate(GiftCertificateDto giftCertificateDto) {

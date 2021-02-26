@@ -27,7 +27,7 @@ public class Order {
     @JoinColumn(name = "user_id_user", nullable = false)
     private User user;
 
-    @ManyToMany(fetch = FetchType.EAGER, cascade = {
+    @ManyToMany(fetch = FetchType.LAZY, cascade = {
             CascadeType.DETACH,
             CascadeType.MERGE,
             CascadeType.REFRESH,

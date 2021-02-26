@@ -4,7 +4,6 @@ import com.epam.esm.dto.TagDto;
 import com.epam.esm.entity.Tag;
 import com.epam.esm.entity.User;
 import com.epam.esm.exception.DuplicateNameException;
-import com.epam.esm.exception.InvalidDataExeception;
 import com.epam.esm.exception.NotExistIdEntityException;
 import com.epam.esm.repository.tag.TagRepository;
 import com.epam.esm.repository.user.UserRepository;
@@ -24,9 +23,7 @@ import java.util.stream.Collectors;
 public class TagService implements ITagService {
 
     private TagRepository tagRepository;
-
     private ModelMapper modelMapper;
-
     private UserRepository userRepository;
 
     @Autowired
@@ -56,9 +53,7 @@ public class TagService implements ITagService {
 
     @Override
     public TagDto create(TagDto tagDto) {
-        if (!TagValidator.validateForCreate(tagDto)) {
-            throw new InvalidDataExeception("Invalid data for creating a tag");
-        }
+        TagValidator.validateForCreate(tagDto);
         if (tagRepository.readTagByName(tagDto.getName()).isPresent()) {
             throw new DuplicateNameException("A tag with name = " + tagDto.getName() + " already exists");
         } else {
@@ -66,7 +61,6 @@ public class TagService implements ITagService {
             return modelMapper.map(addedTag, TagDto.class);
         }
     }
-
 
     @Override
     public void delete(final Integer tagId) {
