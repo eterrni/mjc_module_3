@@ -59,6 +59,7 @@ public class UserService implements IUserService {
     }
 
     @Override
+    @Transactional
     public UserDto create(RegistrationUserDto registrationUserDto) {
         User user = userRepository.readByEmail(registrationUserDto.getEmail());
 

@@ -5,6 +5,7 @@ import com.epam.esm.repository.IUserRepository;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
@@ -47,9 +48,13 @@ public class UserRepository implements IUserRepository {
 
     @Override
     public User readByEmail(String email) {
-        TypedQuery<User> userTypedQuery = entityManager.createQuery("select u from User where email=:email", User.class);
+        TypedQuery<User> userTypedQuery = entityManager.createQuery("select u from User u where u.email=:email", User.class);
         userTypedQuery.setParameter("email", email);
-        return userTypedQuery.getSingleResult();
+        try {
+            return userTypedQuery.getSingleResult();
+        } catch (NoResultException e) {
+            return null;
+        }
     }
 
     @Override

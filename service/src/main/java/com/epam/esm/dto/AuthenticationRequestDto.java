@@ -3,8 +3,7 @@ package com.epam.esm.dto;
 import lombok.Data;
 
 @Data
-public class RegistrationUserDto {
-    private String name;
+public class AuthenticationRequestDto {
     private String email;
     private String password;
 }
