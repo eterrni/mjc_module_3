@@ -6,6 +6,7 @@ import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
@@ -29,8 +30,26 @@ public class UserRepository implements IUserRepository {
     }
 
     @Override
-    public User read(int id) {
+    public User read(Integer id) {
         return entityManager.find(User.class, id);
+    }
+
+    @Override
+    public User create(User user) {
+        entityManager.persist(user);
+        return user;
+    }
+
+    @Override
+    public void delete(Integer id) {
+        entityManager.remove(read(id));
+    }
+
+    @Override
+    public User readByEmail(String email) {
+        TypedQuery<User> userTypedQuery = entityManager.createQuery("select u from User where email=:email", User.class);
+        userTypedQuery.setParameter("email", email);
+        return userTypedQuery.getSingleResult();
     }
 
     @Override

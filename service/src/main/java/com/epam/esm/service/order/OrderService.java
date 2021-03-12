@@ -4,8 +4,7 @@ import com.epam.esm.dto.OrderDto;
 import com.epam.esm.entity.GiftCertificate;
 import com.epam.esm.entity.Order;
 import com.epam.esm.entity.User;
-import com.epam.esm.exception.InvalidDataExeception;
-import com.epam.esm.exception.NotExistIdEntityException;
+import com.epam.esm.exception.NotExistEntityException;
 import com.epam.esm.repository.certificate.GiftCertificateRepository;
 import com.epam.esm.repository.order.OrderRepository;
 import com.epam.esm.repository.user.UserRepository;
@@ -51,7 +50,7 @@ public class OrderService implements IOrderService {
     public OrderDto read(int id) {
         Order readedOrder = orderRepository.read(id);
         if (readedOrder == null) {
-            throw new NotExistIdEntityException("There is no order with ID = " + id + " in Database");
+            throw new NotExistEntityException("There is no order with ID = " + id + " in Database");
         } else {
             return modelMapper.map(readedOrder, OrderDto.class);
         }
@@ -71,7 +70,7 @@ public class OrderService implements IOrderService {
         int userId = createParameterOrder.getUserID();
         User user = userRepository.read(userId);
         if (user == null) {
-            throw new NotExistIdEntityException("There is no user with ID =" + userId + " in Database");
+            throw new NotExistEntityException("There is no user with ID =" + userId + " in Database");
         }
 
         List<GiftCertificate> giftCertificateList = new ArrayList<>();
@@ -80,7 +79,7 @@ public class OrderService implements IOrderService {
         for (int giftId : createParameterOrder.getGiftsId()) {
             GiftCertificate read = giftCertificateRepository.read(giftId);
             if (read == null) {
-                throw new NotExistIdEntityException("There is no gift certificate with ID =" + giftId + " in Database");
+                throw new NotExistEntityException("There is no gift certificate with ID =" + giftId + " in Database");
             }
             price += read.getPrice().doubleValue();
             giftCertificateList.add(read);

@@ -5,7 +5,7 @@ import com.epam.esm.dto.UserDto;
 import com.epam.esm.entity.GiftCertificate;
 import com.epam.esm.entity.Order;
 import com.epam.esm.entity.User;
-import com.epam.esm.exception.NotExistIdEntityException;
+import com.epam.esm.exception.NotExistEntityException;
 import com.epam.esm.repository.certificate.GiftCertificateRepository;
 import com.epam.esm.repository.order.OrderRepository;
 import com.epam.esm.repository.user.UserRepository;
@@ -119,7 +119,7 @@ class OrderServiceTest {
         //when
         when(orderRepository.read(NON_EXISTING_ID)).thenReturn(null);
         //then
-        assertThrows(NotExistIdEntityException.class, () -> orderService.read(NON_EXISTING_ID));
+        assertThrows(NotExistEntityException.class, () -> orderService.read(NON_EXISTING_ID));
     }
 
 
@@ -142,7 +142,7 @@ class OrderServiceTest {
         //when
         when(userRepository.read(NON_EXISTING_ID)).thenReturn(null);
         //then
-        assertThrows(NotExistIdEntityException.class, () -> orderService.create(createParameterOrder));
+        assertThrows(NotExistEntityException.class, () -> orderService.create(createParameterOrder));
     }
 
     @Test
@@ -161,7 +161,7 @@ class OrderServiceTest {
             when(giftCertificateRepository.read(certificateID)).thenReturn(null);
         }
         //then
-        assertThrows(NotExistIdEntityException.class, () -> orderService.create(createParameterOrder));
+        assertThrows(NotExistEntityException.class, () -> orderService.create(createParameterOrder));
     }
 
     @Test

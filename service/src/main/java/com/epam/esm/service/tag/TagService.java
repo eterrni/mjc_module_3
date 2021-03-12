@@ -3,7 +3,7 @@ package com.epam.esm.service.tag;
 import com.epam.esm.dto.TagDto;
 import com.epam.esm.entity.Tag;
 import com.epam.esm.exception.DuplicateNameException;
-import com.epam.esm.exception.NotExistIdEntityException;
+import com.epam.esm.exception.NotExistEntityException;
 import com.epam.esm.repository.tag.TagRepository;
 import com.epam.esm.service.ITagService;
 import com.epam.esm.util.Page;
@@ -41,7 +41,7 @@ public class TagService implements ITagService {
     public TagDto read(final Integer tagId) {
         Tag readedTag = tagRepository.read(tagId);
         if (readedTag == null) {
-            throw new NotExistIdEntityException("There is no tag with ID = " + tagId + " in Database");
+            throw new NotExistEntityException("There is no tag with ID = " + tagId + " in Database");
         } else {
             return modelMapper.map(readedTag, TagDto.class);
         }
@@ -62,7 +62,7 @@ public class TagService implements ITagService {
     public void delete(final Integer tagId) {
         Tag readedTag = tagRepository.read(tagId);
         if (readedTag == null) {
-            throw new NotExistIdEntityException("There is no tag with ID = " + tagId + " in Database");
+            throw new NotExistEntityException("There is no tag with ID = " + tagId + " in Database");
         } else {
             tagRepository.delete(tagId);
         }

@@ -2,7 +2,7 @@ package com.epam.esm.exceptionHandler;
 
 import com.epam.esm.exception.DuplicateNameException;
 import com.epam.esm.exception.InvalidDataExeception;
-import com.epam.esm.exception.NotExistIdEntityException;
+import com.epam.esm.exception.NotExistEntityException;
 import com.epam.esm.exception.RemoveCertificateException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 @ControllerAdvice
 public class GlobalExceptionHandler {
     @ExceptionHandler
-    public ResponseEntity<ErrorHandler> handleNotExistIdEntityException(NotExistIdEntityException exception) {
+    public ResponseEntity<ErrorHandler> handleNotExistIdEntityException(NotExistEntityException exception) {
         return new ResponseEntity<>(new ErrorHandler(exception.getMessage(), 30), HttpStatus.NOT_FOUND);
     }
 

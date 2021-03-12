@@ -4,7 +4,7 @@ import com.epam.esm.dto.TagDto;
 import com.epam.esm.entity.Tag;
 import com.epam.esm.exception.DuplicateNameException;
 import com.epam.esm.exception.InvalidDataExeception;
-import com.epam.esm.exception.NotExistIdEntityException;
+import com.epam.esm.exception.NotExistEntityException;
 import com.epam.esm.repository.tag.TagRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -80,7 +80,7 @@ class TagServiceTest {
         //when
         when(tagRepository.read(2)).thenReturn(null);
         //then
-        assertThrows(NotExistIdEntityException.class, () -> tagService.read(2));
+        assertThrows(NotExistEntityException.class, () -> tagService.read(2));
     }
 
     @Test
@@ -130,7 +130,7 @@ class TagServiceTest {
         //when
         when(tagRepository.read(123)).thenReturn(null);
         //then
-        assertThrows(NotExistIdEntityException.class, () -> tagService.delete(123));
+        assertThrows(NotExistEntityException.class, () -> tagService.delete(123));
     }
 
     @Test
