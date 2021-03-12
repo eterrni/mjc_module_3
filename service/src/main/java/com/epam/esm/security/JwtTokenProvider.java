@@ -4,7 +4,7 @@ import com.epam.esm.exception.InvalidTokenException;
 import com.epam.esm.exception.TokenExpiredException;
 import com.epam.esm.service.user.UserService;
 import io.jsonwebtoken.*;
-import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -19,10 +19,14 @@ import java.util.Base64;
 import java.util.Date;
 
 @Component
-@RequiredArgsConstructor
 public class JwtTokenProvider {
     private final static String BEARER = "Bearer ";
     private final UserService userService;
+
+    @Autowired
+    public JwtTokenProvider(UserService userService) {
+        this.userService = userService;
+    }
 
     @Value("${jwt.header}")
     private String authorizationHeader;

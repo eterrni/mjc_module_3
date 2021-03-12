@@ -134,18 +134,6 @@ class OrderServiceTest {
     }
 
     @Test
-    @DisplayName("Creating an order with a non-existent user, expected NotExistIdEntityException")
-    void create_creatingOrderWithNonExistentUser_thrownNotExistIdException_test() {
-        //given
-        CreateParameterOrder createParameterOrder = new CreateParameterOrder();
-        createParameterOrder.setUserID(NON_EXISTING_ID);
-        //when
-        when(userRepository.read(NON_EXISTING_ID)).thenReturn(null);
-        //then
-        assertThrows(NotExistEntityException.class, () -> orderService.create(createParameterOrder));
-    }
-
-    @Test
     @DisplayName("Creating an order with a non-existent certificate, expected NotExistIdEntityException")
     void create_creatingOrderWithNonExistentCertificates_thrownNotExistIdEntityException_test() {
         //given
