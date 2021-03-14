@@ -2,6 +2,8 @@ package com.epam.esm.repository;
 
 import com.epam.esm.entity.User;
 
+import java.util.Optional;
+
 /**
  * Interface provides methods to interact with User data from database.
  * Methods should connect to database and manipulate with data(read)
@@ -20,5 +22,5 @@ public interface IUserRepository extends ICRDRepository<User, Integer> {
      * @param email is User email value.
      * @return {@link User} the entity on this email.
      */
-    User readByEmail(String email);
+    Optional<User> readByEmail(String email);
 }

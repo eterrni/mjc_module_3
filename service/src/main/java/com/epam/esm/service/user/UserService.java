@@ -23,6 +23,7 @@ import javax.transaction.Transactional;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -61,9 +62,9 @@ public class UserService implements IUserService {
     @Override
     @Transactional
     public UserDto create(RegistrationUserDto registrationUserDto) {
-        User user = userRepository.readByEmail(registrationUserDto.getEmail());
+        Optional<User> user = userRepository.readByEmail(registrationUserDto.getEmail());
 
-        if (user != null) {
+        if (user.isPresent()) {
             throw new UserAlreadyExistException("A user with email = " + registrationUserDto.getEmail() + " already exists");
         }
         User newUser = new User();
@@ -113,11 +114,13 @@ public class UserService implements IUserService {
     }
 
     @Override
+    @Transactional
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        User user = userRepository.readByEmail(email);
-        if (user == null) {
+        Optional<User> loadUser = userRepository.readByEmail(email);
+        if (!loadUser.isPresent()) {
             throw new NotExistEntityException("There is no user with email = " + email + " in Database");
         } else {
+            User user = loadUser.get();
             return new JwtUser(
                     user.getId(),
                     user.getEmail(),
