@@ -55,4 +55,9 @@ public class OrderRepository implements IOrderRepository {
         query.select(builder.count(query.from(Order.class)));
         return entityManager.createQuery(query).getSingleResult();
     }
+
+    @Override
+    public void delete(int id) {
+        entityManager.remove(read(id));
+    }
 }

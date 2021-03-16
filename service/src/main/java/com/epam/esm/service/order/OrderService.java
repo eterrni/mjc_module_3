@@ -12,6 +12,7 @@ import com.epam.esm.service.IOrderService;
 import com.epam.esm.util.CreateParameterOrder;
 import com.epam.esm.util.OrderValidator;
 import com.epam.esm.util.Page;
+import com.epam.esm.util.SecurityValidator;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -58,6 +59,7 @@ public class OrderService implements IOrderService {
 
     @Override
     public List<OrderDto> readOrdersByUserID(int userID) {
+        SecurityValidator.validateUserAccess(userID);
         return orderRepository.readOrdersByUserID(userID).stream()
                 .map(order -> modelMapper.map(order, OrderDto.class))
                 .collect(Collectors.toList());
@@ -67,6 +69,7 @@ public class OrderService implements IOrderService {
     @Transactional
     public OrderDto create(CreateParameterOrder createParameterOrder) {
         OrderValidator.validateForCreate(createParameterOrder);
+        SecurityValidator.validateUserAccess(createParameterOrder.getUserID());
         int userId = createParameterOrder.getUserID();
         User user = userRepository.read(userId);
         if (user == null) {
@@ -91,6 +94,17 @@ public class OrderService implements IOrderService {
         order.setUser(user);
 
         return modelMapper.map(orderRepository.create(order), OrderDto.class);
+    }
+
+    @Override
+    @Transactional
+    public void delete(final int id) {
+        Order readOrder = orderRepository.read(id);
+        if (readOrder == null) {
+            throw new NotExistEntityException("There is no order with ID = " + id + " in Database");
+        } else {
+            orderRepository.delete(id);
+        }
     }
 
     public long getCountOfEntities() {

@@ -3,10 +3,10 @@ package com.epam.esm.exceptionHandler;
 import com.epam.esm.exception.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.client.HttpClientErrorException;
 
 import javax.naming.AuthenticationException;
 
@@ -40,6 +40,16 @@ public class GlobalExceptionHandler {
     @ExceptionHandler
     public ResponseEntity<ErrorHandler> handleBadCredentialsException(BadCredentialsException exception) {
         return new ResponseEntity<>(new ErrorHandler(exception.getMessage(), 60), HttpStatus.UNAUTHORIZED);
+    }
+
+    @ExceptionHandler
+    public ResponseEntity<ErrorHandler> handleAuthenticationException(AuthenticationException exception) {
+        return new ResponseEntity<>(new ErrorHandler(exception.getMessage(), 60), HttpStatus.UNAUTHORIZED);
+    }
+
+    @ExceptionHandler
+    public ResponseEntity<ErrorHandler> handleAccessDeniedException(AccessDeniedException exception) {
+        return new ResponseEntity<>(new ErrorHandler(exception.getMessage(), 70), HttpStatus.FORBIDDEN);
     }
 
 }

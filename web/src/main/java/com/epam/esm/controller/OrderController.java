@@ -4,8 +4,9 @@ import com.epam.esm.dto.OrderDto;
 import com.epam.esm.service.order.OrderService;
 import com.epam.esm.util.CreateParameterOrder;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.hateoas.PagedModel;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Collection;
@@ -33,6 +34,7 @@ public class OrderController extends HATEOASController<OrderDto> {
      * @return List of {@link OrderDto} objects with Order data.
      */
     @GetMapping("/orders")
+    @PreAuthorize("hasRole('ADMIN')")
     public Collection<OrderDto> readAll(
             @RequestParam(value = "page", required = false, defaultValue = "1") int page,
             @RequestParam(value = "size", required = false, defaultValue = "4") int size) {
@@ -48,6 +50,7 @@ public class OrderController extends HATEOASController<OrderDto> {
      * @return List of {@link OrderDto} objects with Order data.
      */
     @GetMapping(value = "/orders", params = "user")
+    @PreAuthorize("hasRole('ADMIN') or hasRole('USER')")
     public List<OrderDto> readByUserId(@RequestParam(value = "user") int userID) {
         List<OrderDto> orderDtoList = orderService.readOrdersByUserID(userID);
         addLinksToListOrder(orderDtoList);
@@ -61,6 +64,7 @@ public class OrderController extends HATEOASController<OrderDto> {
      * @return Object with Order data.
      */
     @GetMapping("/order/{orderID}")
+    @PreAuthorize("hasRole('ADMIN')")
     public OrderDto read(@PathVariable int orderID) {
         return addLinksToOrder(orderService.read(orderID));
     }
@@ -73,7 +77,21 @@ public class OrderController extends HATEOASController<OrderDto> {
      */
     @PostMapping("/order")
     @ResponseStatus(HttpStatus.CREATED)
+    @PreAuthorize("hasRole('ADMIN') or hasRole('USER')")
     public OrderDto create(@RequestBody CreateParameterOrder createParameterOrder) {
         return orderService.create(createParameterOrder);
+    }
+
+    /**
+     * Delete order by ID
+     *
+     * @param id of the order we want to delete
+     */
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @DeleteMapping("/order/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<Void> removeOrder(@PathVariable int id) {
+        orderService.delete(id);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 }

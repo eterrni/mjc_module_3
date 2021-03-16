@@ -10,6 +10,8 @@ import com.epam.esm.repository.user.UserRepository;
 import com.epam.esm.security.JwtUser;
 import com.epam.esm.service.IUserService;
 import com.epam.esm.util.Page;
+import com.epam.esm.util.SecurityValidator;
+import com.epam.esm.util.UserValidator;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
@@ -40,7 +42,6 @@ public class UserService implements IUserService {
         this.passwordEncoder = passwordEncoder;
     }
 
-
     @Override
     public List<UserDto> readAll(int page, int size) {
         Page userPage = new Page(page, size, userRepository.getCountOfEntities());
@@ -51,17 +52,19 @@ public class UserService implements IUserService {
 
     @Override
     public UserDto read(int id) {
-        User readedUser = userRepository.read(id);
-        if (readedUser == null) {
+        SecurityValidator.validateUserAccess(id);
+        User readUser = userRepository.read(id);
+        if (readUser == null) {
             throw new NotExistEntityException("There is no user with ID = " + id + " in Database");
         } else {
-            return modelMapper.map(readedUser, UserDto.class);
+            return modelMapper.map(readUser, UserDto.class);
         }
     }
 
     @Override
     @Transactional
     public UserDto create(RegistrationUserDto registrationUserDto) {
+        UserValidator.validateRegistrationUser(registrationUserDto);
         Optional<User> user = userRepository.readByEmail(registrationUserDto.getEmail());
 
         if (user.isPresent()) {
@@ -78,28 +81,13 @@ public class UserService implements IUserService {
     }
 
     @Override
+    @Transactional
     public void delete(int id) {
         User user = userRepository.read(id);
         if (user == null) {
             throw new NotExistEntityException("There is no user with ID = " + id + " in Database");
         } else {
             userRepository.delete(id);
-        }
-    }
-
-    @Override
-    @Transactional
-    public UserDto changeRole(int id) {
-        User user = userRepository.read(id);
-        if (user == null) {
-            throw new NotExistEntityException("There is no user with ID = " + id + " in Database");
-        } else {
-            if (user.getRole() == Role.ROLE_ADMIN) {
-                user.setRole(Role.ROLE_USER);
-            } else {
-                user.setRole(Role.ROLE_ADMIN);
-            }
-            return modelMapper.map(user, UserDto.class);
         }
     }
 

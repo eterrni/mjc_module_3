@@ -15,6 +15,11 @@ import org.springframework.web.bind.annotation.*;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * Controller that handles requests related to the authentication
+ *
+ * @author Alexander Novikov
+ */
 @RestController
 @RequestMapping("/api/auth")
 public class AuthenticationController {
@@ -29,9 +34,13 @@ public class AuthenticationController {
         this.userService = userService;
     }
 
+    /**
+     * Method for user authentication
+     *
+     * @param request login data
+     */
     @PostMapping("/login")
     public ResponseEntity authenticate(@RequestBody AuthenticationRequestDto request) {
-
         authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword()));
         String token = jwtTokenProvider.createToken(request.getEmail());
         Map<String, String> result = new HashMap<>();
@@ -40,10 +49,14 @@ public class AuthenticationController {
         return ResponseEntity.ok(result);
     }
 
+    /**
+     * Method for registration user
+     *
+     * @param registrationUserDto registration data
+     */
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping("/registration")
     public UserDto register(@RequestBody RegistrationUserDto registrationUserDto) {
-
         return userService.create(registrationUserDto);
     }
 }

@@ -44,13 +44,6 @@ public interface IUserService extends UserDetailsService {
     void delete(int id);
 
     /**
-     * Change Use role
-     *
-     * @param id of the user we want to change role
-     */
-    UserDto changeRole(int id);
-
-    /**
      * Invokes DAO method to get user Role.
      *
      * @param id is id of user.

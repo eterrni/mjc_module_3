@@ -27,13 +27,13 @@ public abstract class HATEOASController<T> {
     }
 
     public static TagDto addLinksToTag(TagDto tagDto) {
-        tagDto.add(linkTo(methodOn(TagController.class).delete(tagDto.getId())).withRel("delete tag"));
-        tagDto.add(linkTo(methodOn(TagController.class).create(tagDto)).withRel("create tag"));
+        tagDto.add(linkTo(methodOn(TagController.class).delete(tagDto.getId())).withRel("delete_tag"));
+        tagDto.add(linkTo(methodOn(TagController.class).create(tagDto)).withRel("create_tag"));
         return tagDto;
     }
 
     public static UserDto addLinksToUser(UserDto user) {
-        user.add(linkTo(methodOn(OrderController.class).readByUserId(user.getId())).withRel("all user orders"));
+        user.add(linkTo(methodOn(OrderController.class).readByUserId(user.getId())).withRel("user_orders"));
         return user;
     }
 
@@ -65,7 +65,7 @@ public abstract class HATEOASController<T> {
 
     public static void addLinksToListOrder(List<OrderDto> orderDtoList) {
         for (OrderDto orderDto : orderDtoList) {
-            orderDto.add(linkTo(methodOn(OrderController.class).readByUserId(orderDto.getUser().getId())).withRel("user orders"));
+            orderDto.add(linkTo(methodOn(OrderController.class).readByUserId(orderDto.getUser().getId())).withRel("user_orders"));
             addLinksToListCertificate(orderDto.getGiftCertificateList());
 
             UserDto user = orderDto.getUser();

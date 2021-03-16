@@ -4,8 +4,6 @@ import com.epam.esm.dto.UserDto;
 import com.epam.esm.entity.Role;
 import com.epam.esm.service.user.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.hateoas.PagedModel;
-import org.springframework.hateoas.RepresentationModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -41,7 +39,7 @@ public class UserController extends HATEOASController<UserDto> {
             @RequestParam(value = "size", required = false, defaultValue = "4") int size) {
         List<UserDto> userDtoList = userService.readAll(page, size);
         addLinksToListUser(userDtoList);
-        return addPagination(userDtoList,page,size,userService.getCountOfEntities());
+        return addPagination(userDtoList, page, size, userService.getCountOfEntities());
     }
 
     /**
@@ -57,26 +55,30 @@ public class UserController extends HATEOASController<UserDto> {
         return addLinksToUser(userService.read(userID));
     }
 
+    /**
+     * Delete gift certificate by ID
+     *
+     * @param id of the user we want to delete
+     */
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/user/{id}")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Void> removeUser(@PathVariable int id) {
         userService.delete(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
-
-    @GetMapping("/{id}/role")
+    /**
+     * Get user role
+     *
+     * @param id of the user we want to get role
+     * @return user role
+     */
+    @GetMapping("/user/{id}/role")
     @PreAuthorize("hasRole('ADMIN')")
     public String getUserRole(@PathVariable int id) {
         Role role = userService.getUserRole(id);
         return role.name();
     }
 
-//    @PatchMapping("/{id}/role")
-//    @PreAuthorize("hasRole('ADMIN')")
-//    public RepresentationModel changeRole(@PathVariable int id) {
-//        UserDto userDto = userService.changeRole(id);
-//        return hateoasBuilder.addLinksForUser(userDto);
-//    }
 }
