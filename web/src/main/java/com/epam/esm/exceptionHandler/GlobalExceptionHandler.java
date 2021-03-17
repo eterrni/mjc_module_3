@@ -12,6 +12,10 @@ import javax.naming.AuthenticationException;
 
 @ControllerAdvice
 public class GlobalExceptionHandler {
+
+    private static final String INVALID_DATA_MESSAGE = "Invalid data";
+    private static final String ACCESS_DENY_MESSAGE = "Access denied";
+
     @ExceptionHandler
     public ResponseEntity<ErrorHandler> handleNotExistIdEntityException(NotExistEntityException exception) {
         return new ResponseEntity<>(new ErrorHandler(exception.getMessage(), 30), HttpStatus.NOT_FOUND);
@@ -39,7 +43,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler
     public ResponseEntity<ErrorHandler> handleBadCredentialsException(BadCredentialsException exception) {
-        return new ResponseEntity<>(new ErrorHandler(exception.getMessage(), 60), HttpStatus.UNAUTHORIZED);
+        return new ResponseEntity<>(new ErrorHandler(INVALID_DATA_MESSAGE, 60), HttpStatus.UNAUTHORIZED);
     }
 
     @ExceptionHandler
@@ -49,7 +53,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler
     public ResponseEntity<ErrorHandler> handleAccessDeniedException(AccessDeniedException exception) {
-        return new ResponseEntity<>(new ErrorHandler(exception.getMessage(), 70), HttpStatus.FORBIDDEN);
+        return new ResponseEntity<>(new ErrorHandler(ACCESS_DENY_MESSAGE, 70), HttpStatus.FORBIDDEN);
     }
 
 }
