@@ -54,25 +54,6 @@ public class UserServiceTest {
     }
 
     @Test
-    @DisplayName("The method should return the user")
-    public void read_returnsTheExpectedResult_test() {
-        //when
-        when(userRepository.read(1)).thenReturn(user);
-        when(modelMapper.map(user, UserDto.class)).thenReturn(userDto);
-        //then
-        Assertions.assertEquals(userDto, userService.read(1));
-    }
-
-    @Test
-    @DisplayName("A user with such an ID does not exist, an appropriate exception must be thrown")
-    public void read_notExistId_thrownNotExistIdEntityException_test() {
-        //when
-        when(userRepository.read(2)).thenReturn(null);
-        //then
-        assertThrows(NotExistEntityException.class, () -> userService.read(2));
-    }
-
-    @Test
     @DisplayName("Getting a list of UsersDto.")
     public void readAll_returnsTheExpectedResult_test() {
         //when

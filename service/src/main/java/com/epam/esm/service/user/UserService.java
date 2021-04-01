@@ -101,6 +101,10 @@ public class UserService implements IUserService {
         }
     }
 
+    public long getCountOfEntities() {
+        return userRepository.getCountOfEntities();
+    }
+
     @Override
     @Transactional
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
@@ -116,10 +120,6 @@ public class UserService implements IUserService {
                     mapRolesToAuthorities(user.getRole())
             );
         }
-    }
-
-    public long getCountOfEntities() {
-        return userRepository.getCountOfEntities();
     }
 
     private Collection<? extends GrantedAuthority> mapRolesToAuthorities(Role userRole) {
