@@ -51,7 +51,6 @@ public class UserController extends HATEOASController<UserDto> {
     @GetMapping("/user/{userID}")
     @PreAuthorize("hasRole('ADMIN') or hasRole('USER')")
     public UserDto read(@PathVariable int userID) {
-
         return addLinksToUser(userService.read(userID));
     }
 
