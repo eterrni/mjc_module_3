@@ -1,10 +1,11 @@
+#!groovy
 pipeline {
     agent any
     stages {
         stage('Clone sources') {
             steps {
                 echo 'Cloning...'
-                git url: 'https://github.com/eterrni/mjc_module_3.git'
+                git branch: 'master', changelog: true, poll: true, url: 'https://github.com/eterrni/mjc_module_3.git/'
             }
         }
         stage('Build & Test') {
