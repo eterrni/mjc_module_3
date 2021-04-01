@@ -5,7 +5,7 @@ pipeline {
         stage('Clone sources') {
             steps {
                 echo 'Cloning...'
-                git branch: 'develop', changelog: true, poll: true, url: 'https://github.com/eterrni/mjc_module_3.git/'
+                git url: 'https://github.com/eterrni/mjc_module_3.git'
             }
         }
         stage('Build & Test') {
