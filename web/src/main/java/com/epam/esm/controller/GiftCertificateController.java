@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Collection;
@@ -64,6 +65,7 @@ public class GiftCertificateController extends HATEOASController<GiftCertificate
      */
     @PostMapping("/gift-certificate")
     @ResponseStatus(HttpStatus.CREATED)
+    @PreAuthorize("hasRole('ADMIN')")
     public GiftCertificateDto create(@RequestBody GiftCertificateDto giftCertificateDto) {
         return service.create(giftCertificateDto);
     }
@@ -74,6 +76,7 @@ public class GiftCertificateController extends HATEOASController<GiftCertificate
      * @param giftCertificateDto modified
      */
     @PatchMapping("/gift-certificate/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Void> update(@PathVariable int id, @RequestBody GiftCertificateDto giftCertificateDto) {
         giftCertificateDto.setId(id);
         service.update(giftCertificateDto);
@@ -86,6 +89,7 @@ public class GiftCertificateController extends HATEOASController<GiftCertificate
      * @param id of the gift certificate we want to delete
      */
     @DeleteMapping("/gift-certificate/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Void> delete(@PathVariable int id) {
         try {
             service.delete(id);

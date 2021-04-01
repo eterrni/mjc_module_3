@@ -5,6 +5,7 @@ import com.epam.esm.service.tag.TagService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Collection;
@@ -59,6 +60,7 @@ public class TagController extends HATEOASController<TagDto> {
      */
     @PostMapping("/tag")
     @ResponseStatus(HttpStatus.CREATED)
+    @PreAuthorize("hasRole('ADMIN')")
     public TagDto create(@RequestBody TagDto tagDto) {
         return service.create(tagDto);
     }
@@ -69,12 +71,14 @@ public class TagController extends HATEOASController<TagDto> {
      * @param id of the tag we want to delete
      */
     @DeleteMapping("/tag/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Void> delete(@PathVariable int id) {
         service.delete(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
     @GetMapping("/tag/mostUsedTag")
+    @PreAuthorize("hasRole('ADMIN')")
     public TagDto getMostWidelyUsedTagFromUserWithHighestCostOfAllOrders() {
         return service.getMostWidelyUsedTagFromUserWithHighestCostOfAllOrders();
     }

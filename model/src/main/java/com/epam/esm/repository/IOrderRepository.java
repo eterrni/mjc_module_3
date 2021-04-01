@@ -42,4 +42,11 @@ public interface IOrderRepository {
      * @return number of exist orders.
      */
     long getCountOfEntities();
+
+    /**
+     * Delete order by ID
+     *
+     * @param id of the order we want to delete
+     */
+    void delete(final int id);
 }

@@ -42,4 +42,11 @@ public interface IOrderService {
      */
     OrderDto create(CreateParameterOrder createParameterOrder);
 
+    /**
+     * Delete order by ID
+     *
+     * @param id of the order we want to delete
+     */
+    void delete(final int id);
+
 }

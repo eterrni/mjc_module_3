@@ -5,7 +5,7 @@ import com.epam.esm.dto.TagDto;
 import com.epam.esm.entity.GiftCertificate;
 import com.epam.esm.entity.Tag;
 import com.epam.esm.exception.InvalidDataExeception;
-import com.epam.esm.exception.NotExistIdEntityException;
+import com.epam.esm.exception.NotExistEntityException;
 import com.epam.esm.repository.certificate.GiftCertificateRepository;
 import com.epam.esm.repository.tag.TagRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -130,7 +130,7 @@ class GiftCertificateServiceTest {
         //when
         when(giftCertificateRepository.read(NON_EXISTING_ID)).thenReturn(null);
         //then
-        assertThrows(NotExistIdEntityException.class, () -> giftCertificateService.read(NON_EXISTING_ID));
+        assertThrows(NotExistEntityException.class, () -> giftCertificateService.read(NON_EXISTING_ID));
     }
 
     @Test
@@ -174,7 +174,7 @@ class GiftCertificateServiceTest {
         //when
         when(giftCertificateRepository.read(nonExistCertificate.getId())).thenReturn(null);
         //then
-        assertThrows(NotExistIdEntityException.class, () -> giftCertificateService.update(nonExistCertificate));
+        assertThrows(NotExistEntityException.class, () -> giftCertificateService.update(nonExistCertificate));
     }
 
 
@@ -196,7 +196,7 @@ class GiftCertificateServiceTest {
         //when
         when(giftCertificateRepository.read(NON_EXISTING_ID)).thenReturn(null);
         //then
-        assertThrows(NotExistIdEntityException.class, () -> giftCertificateService.delete(NON_EXISTING_ID));
+        assertThrows(NotExistEntityException.class, () -> giftCertificateService.delete(NON_EXISTING_ID));
     }
 
     @Test

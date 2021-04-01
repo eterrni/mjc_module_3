@@ -2,7 +2,7 @@ package com.epam.esm.service.user;
 
 import com.epam.esm.dto.UserDto;
 import com.epam.esm.entity.User;
-import com.epam.esm.exception.NotExistIdEntityException;
+import com.epam.esm.exception.NotExistEntityException;
 import com.epam.esm.repository.user.UserRepository;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -69,7 +69,7 @@ public class UserServiceTest {
         //when
         when(userRepository.read(2)).thenReturn(null);
         //then
-        assertThrows(NotExistIdEntityException.class, () -> userService.read(2));
+        assertThrows(NotExistEntityException.class, () -> userService.read(2));
     }
 
     @Test

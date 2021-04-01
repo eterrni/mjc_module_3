@@ -3,7 +3,7 @@ package com.epam.esm.service.certificate;
 import com.epam.esm.dto.GiftCertificateDto;
 import com.epam.esm.entity.GiftCertificate;
 import com.epam.esm.entity.Tag;
-import com.epam.esm.exception.NotExistIdEntityException;
+import com.epam.esm.exception.NotExistEntityException;
 import com.epam.esm.repository.certificate.GiftCertificateRepository;
 import com.epam.esm.repository.tag.TagRepository;
 import com.epam.esm.service.IGiftCertificateService;
@@ -58,7 +58,7 @@ public class GiftCertificateService implements IGiftCertificateService {
     public GiftCertificateDto read(final Integer id) {
         GiftCertificate readedGiftCertificate = giftCertificateRepository.read(id);
         if (readedGiftCertificate == null) {
-            throw new NotExistIdEntityException("There is no gift certificate with ID = " + id + " in Database");
+            throw new NotExistEntityException("There is no gift certificate with ID = " + id + " in Database");
         } else {
             return modelMapper.map(readedGiftCertificate, GiftCertificateDto.class);
         }
@@ -80,7 +80,7 @@ public class GiftCertificateService implements IGiftCertificateService {
 
         GiftCertificate readGiftCertificate = giftCertificateRepository.read(modifiedGiftCertificateDto.getId());
         if (readGiftCertificate == null) {
-            throw new NotExistIdEntityException("There is no gift certificate with ID = " + modifiedGiftCertificateDto.getId() + " in Database");
+            throw new NotExistEntityException("There is no gift certificate with ID = " + modifiedGiftCertificateDto.getId() + " in Database");
         }
 
         GiftCertificate modifiedGiftCertificate = modelMapper.map(modifiedGiftCertificateDto, GiftCertificate.class);
@@ -94,7 +94,7 @@ public class GiftCertificateService implements IGiftCertificateService {
     public void delete(final Integer id) {
         GiftCertificate readedGiftCertificate = giftCertificateRepository.read(id);
         if (readedGiftCertificate == null) {
-            throw new NotExistIdEntityException("There is no gift certificate with ID = " + id + " in Database");
+            throw new NotExistEntityException("There is no gift certificate with ID = " + id + " in Database");
         } else {
             giftCertificateRepository.delete(id);
         }

@@ -1,9 +1,12 @@
 package com.epam.esm.controller;
 
 import com.epam.esm.dto.UserDto;
+import com.epam.esm.entity.Role;
 import com.epam.esm.service.user.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.hateoas.PagedModel;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Collection;
@@ -30,12 +33,13 @@ public class UserController extends HATEOASController<UserDto> {
      * @return List of {@link UserDto} objects with User data.
      */
     @GetMapping("/users")
+    @PreAuthorize("hasRole('ADMIN')")
     public Collection<UserDto> readAll(
             @RequestParam(value = "page", required = false, defaultValue = "1") int page,
             @RequestParam(value = "size", required = false, defaultValue = "4") int size) {
         List<UserDto> userDtoList = userService.readAll(page, size);
         addLinksToListUser(userDtoList);
-        return addPagination(userDtoList,page,size,userService.getCountOfEntities());
+        return addPagination(userDtoList, page, size, userService.getCountOfEntities());
     }
 
     /**
@@ -45,8 +49,36 @@ public class UserController extends HATEOASController<UserDto> {
      * @return Object with User data.
      */
     @GetMapping("/user/{userID}")
+    @PreAuthorize("hasRole('ADMIN') or hasRole('USER')")
     public UserDto read(@PathVariable int userID) {
 
         return addLinksToUser(userService.read(userID));
     }
+
+    /**
+     * Delete gift certificate by ID
+     *
+     * @param id of the user we want to delete
+     */
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @DeleteMapping("/user/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<Void> removeUser(@PathVariable int id) {
+        userService.delete(id);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+
+    /**
+     * Get user role
+     *
+     * @param id of the user we want to get role
+     * @return user role
+     */
+    @GetMapping("/user/{id}/role")
+    @PreAuthorize("hasRole('ADMIN')")
+    public String getUserRole(@PathVariable int id) {
+        Role role = userService.getUserRole(id);
+        return role.name();
+    }
+
 }
