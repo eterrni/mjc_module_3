@@ -12,14 +12,14 @@ pipeline {
         stage("Build") {
             steps {
                 echo 'Build ...'
-                bat './gradlew clean build'
+                bat 'gradlew clean build'
             }
         }
 
         stage("Test") {
             steps {
                 echo 'Test...'
-                bat './gradlew test'
+                bat 'gradlew test'
             }
         }
 
