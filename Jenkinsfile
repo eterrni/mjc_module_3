@@ -1,12 +1,11 @@
 #!groovy
 pipeline {
     agent any
-    tool name: 'GRADLE_HOME', type: 'gradle'
     stages {
 
         stage("Get code") {
             steps {
-                git branch: 'develop', url 'https://github.com/eterrni/mjc_module_3/tree/develop.git'
+                git branch: 'develop', url 'https://github.com/eterrni/mjc_module_3.git'
             }
         }
 
