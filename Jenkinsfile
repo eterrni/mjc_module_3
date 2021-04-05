@@ -5,7 +5,7 @@ pipeline {
 
         stage("Get code") {
             steps {
-                git branch: 'develop', url 'https://github.com/eterrni/mjc_module_3.git'
+                git branch: 'develop', changelog: true, poll: true, url: 'https://github.com/eterrni/mjc_module_3.git/'
             }
         }
 
