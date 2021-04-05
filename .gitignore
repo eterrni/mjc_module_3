@@ -8,7 +8,7 @@ gradlew
 /.settings
 /build
 **/build
-/gradle
+
 /.gradle
 /.classpath
 /.project
