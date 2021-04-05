@@ -3,7 +3,6 @@ package com.epam.esm.repository.certificate;
 import com.epam.esm.entity.GiftCertificate;
 import com.epam.esm.repository.IGiftCertificateRepository;
 import com.epam.esm.util.GiftCertificateQueryParameter;
-import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
@@ -11,7 +10,6 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
-import java.sql.SQLException;
 import java.util.List;
 
 import static com.epam.esm.util.GiftCertificateCriteriaBuilder.build;
