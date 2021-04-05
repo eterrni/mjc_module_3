@@ -9,17 +9,10 @@ pipeline {
             }
         }
 
-        stage("Build") {
+        stage("Build & Test") {
             steps {
-                echo 'Build ...'
+                echo 'Build and Test ...'
                 bat 'gradlew clean build'
-            }
-        }
-
-        stage("Test") {
-            steps {
-                echo 'Test...'
-                bat 'gradlew test'
             }
         }
 
