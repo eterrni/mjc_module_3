@@ -1,7 +1,12 @@
-dependencies{
+apply plugin: 'war'
+war {
+    enabled = true
+}
+
+dependencies {
     implementation project(":service")
     implementation project(":model")
 }
-bootJar{
+bootJar {
     archiveFileName = 'webBootJar.jar'
 }
